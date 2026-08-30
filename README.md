@@ -1,6 +1,6 @@
 # Trace Learning — Warehouse Agent
 
-Ask a warehouse operations agent questions about **WH-EAST** — picks, SKUs, bins, lots, inbound, workers, and WMS incidents. The agent uses LangChain tools to look up data and answer.
+Ask a warehouse operations agent questions about **WH-EAST**. The agent is built with [LangChain Deep Agents](https://docs.langchain.com/oss/python/deepagents/overview) (`create_deep_agent`) — planning, context management, and your warehouse tools.
 
 ## Setup
 
