@@ -1,3 +1,3 @@
-"""Trace Learning — experimental deep agent with mock tools and workflow graphs."""
+"""Trace Learning — warehouse agent with mock WMS tools."""
 
 __version__ = "0.1.0"

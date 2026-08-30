@@ -33,6 +33,11 @@ class WarehouseAgent:
     async def ainvoke(self, question: str) -> dict[str, Any]:
         return await self._graph.ainvoke({"messages": [HumanMessage(content=question)]})
 
+    def ask(self, question: str) -> str:
+        """Ask the agent a question and return the final text answer."""
+        response = self.invoke(question)
+        return response["messages"][-1].content
+
 
 def create_warehouse_agent(
     llm: BaseChatModel | None = None,
@@ -61,3 +66,8 @@ def create_warehouse_agent(
 # Backward-compatible aliases
 DeepAgent = WarehouseAgent
 create_deep_agent = create_warehouse_agent
+
+
+def ask(question: str, *, llm: BaseChatModel | None = None) -> str:
+    """One-shot helper: create an agent, ask a question, return the answer."""
+    return create_warehouse_agent(llm=llm).ask(question)

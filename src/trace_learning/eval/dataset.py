@@ -56,7 +56,6 @@ class EvalQuestion(BaseModel):
     expected_answer: str
     expected_tool_calls: list[ExpectedToolCall] = Field(default_factory=list)
     min_tool_calls: int = MIN_TOOL_CALLS
-    workflow_id: str | None = None
     difficulty: Literal["easy", "medium", "hard"] = "medium"
     notes: str = ""
 
