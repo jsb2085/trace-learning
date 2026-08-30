@@ -1,0 +1,44 @@
+{
+  "documents": [
+    {
+      "id": "doc-001",
+      "title": "Refund Policy",
+      "body": "Customers may request a full refund within 30 days of purchase. After 30 days, store credit only."
+    },
+    {
+      "id": "doc-002",
+      "title": "Shipping SLA",
+      "body": "Standard shipping delivers in 5-7 business days. Express shipping delivers in 1-2 business days."
+    },
+    {
+      "id": "doc-003",
+      "title": "Support Hours",
+      "body": "Live chat support is available Monday through Friday, 9am to 6pm Pacific Time."
+    },
+    {
+      "id": "doc-004",
+      "title": "Enterprise Plan",
+      "body": "The Enterprise plan includes SSO, audit logs, and a dedicated account manager. Minimum 50 seats."
+    },
+    {
+      "id": "doc-005",
+      "title": "API Rate Limits",
+      "body": "Free tier: 100 requests per minute. Pro tier: 1000 requests per minute. Enterprise: custom limits."
+    },
+    {
+      "id": "doc-006",
+      "title": "Data Retention",
+      "body": "User activity logs are retained for 90 days. Audit logs for Enterprise customers are retained for 1 year."
+    },
+    {
+      "id": "doc-007",
+      "title": "Password Requirements",
+      "body": "Passwords must be at least 12 characters and include uppercase, lowercase, a number, and a symbol."
+    },
+    {
+      "id": "doc-008",
+      "title": "Incident Response",
+      "body": "P0 incidents require acknowledgment within 15 minutes and executive notification within 1 hour."
+    }
+  ]
+}

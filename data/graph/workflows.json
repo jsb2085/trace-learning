@@ -1,0 +1,44 @@
+{
+  "workflows": [
+    {
+      "id": "wf-onboarding-check",
+      "name": "Onboarding Compliance Check",
+      "description": "Read onboarding doc and verify user team assignment",
+      "trigger_patterns": ["onboarding", "security training", "new hire"],
+      "expected_tools": ["mcp_read_file", "mcp_get_user"],
+      "nodes": [
+        {"id": "start", "type": "start", "label": "Start"},
+        {"id": "read-onboarding", "type": "tool", "label": "Read onboarding doc", "tool_name": "mcp_read_file"},
+        {"id": "get-user", "type": "tool", "label": "Get user record", "tool_name": "mcp_get_user"},
+        {"id": "summarize", "type": "llm", "label": "Summarize compliance status"},
+        {"id": "end", "type": "end", "label": "End"}
+      ],
+      "edges": [
+        {"source": "start", "target": "read-onboarding"},
+        {"source": "read-onboarding", "target": "get-user"},
+        {"source": "get-user", "target": "summarize"},
+        {"source": "summarize", "target": "end"}
+      ]
+    },
+    {
+      "id": "wf-order-status-rag",
+      "name": "Order Status with Policy Context",
+      "description": "Look up order then retrieve refund policy for context",
+      "trigger_patterns": ["order status and refund", "can I refund my order"],
+      "expected_tools": ["lookup_order", "rag_search"],
+      "nodes": [
+        {"id": "start", "type": "start", "label": "Start"},
+        {"id": "lookup", "type": "tool", "label": "Look up order", "tool_name": "lookup_order"},
+        {"id": "rag", "type": "tool", "label": "Get refund policy", "tool_name": "rag_search"},
+        {"id": "answer", "type": "llm", "label": "Compose answer"},
+        {"id": "end", "type": "end", "label": "End"}
+      ],
+      "edges": [
+        {"source": "start", "target": "lookup"},
+        {"source": "lookup", "target": "rag"},
+        {"source": "rag", "target": "answer"},
+        {"source": "answer", "target": "end"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,532 @@
+{
+  "version": "0.1.0",
+  "description": "Eval dataset for trace-learning deep agent. Target: 60 questions (15 per category).",
+  "questions": [
+    {
+      "id": "rag-001",
+      "category": "rag",
+      "question": "What is the refund policy?",
+      "expected_answer": "30 days",
+      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "refund policy"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "rag-002",
+      "category": "rag",
+      "question": "How long does standard shipping take?",
+      "expected_answer": "5-7 business days",
+      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "standard shipping"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "rag-003",
+      "category": "rag",
+      "question": "When is live chat support available?",
+      "expected_answer": "Monday through Friday, 9am to 6pm Pacific",
+      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "support hours"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "rag-004",
+      "category": "rag",
+      "question": "What is included in the Enterprise plan?",
+      "expected_answer": "SSO, audit logs, and a dedicated account manager",
+      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "Enterprise plan"}}],
+      "difficulty": "medium"
+    },
+    {
+      "id": "rag-005",
+      "category": "rag",
+      "question": "What are the API rate limits for the Pro tier?",
+      "expected_answer": "1000 requests per minute",
+      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "Pro tier rate limits"}}],
+      "difficulty": "medium"
+    },
+    {
+      "id": "rag-006",
+      "category": "rag",
+      "question": "How long are user activity logs retained?",
+      "expected_answer": "90 days",
+      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "data retention"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "rag-007",
+      "category": "rag",
+      "question": "What are the password requirements?",
+      "expected_answer": "at least 12 characters",
+      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "password requirements"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "rag-008",
+      "category": "rag",
+      "question": "How quickly must P0 incidents be acknowledged?",
+      "expected_answer": "15 minutes",
+      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "P0 incidents"}}],
+      "difficulty": "medium"
+    },
+    {
+      "id": "rag-009",
+      "category": "rag",
+      "question": "What is the minimum seat count for Enterprise?",
+      "expected_answer": "50 seats",
+      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "Enterprise minimum seats"}}],
+      "difficulty": "medium"
+    },
+    {
+      "id": "rag-010",
+      "category": "rag",
+      "question": "How long are Enterprise audit logs kept?",
+      "expected_answer": "1 year",
+      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "Enterprise audit logs retention"}}],
+      "difficulty": "medium"
+    },
+    {
+      "id": "rag-011",
+      "category": "rag",
+      "question": "What is the free tier API rate limit?",
+      "expected_answer": "100 requests per minute",
+      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "free tier API"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "rag-012",
+      "category": "rag",
+      "question": "How fast is express shipping?",
+      "expected_answer": "1-2 business days",
+      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "express shipping"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "rag-013",
+      "category": "rag",
+      "question": "Can customers get a refund after 30 days?",
+      "expected_answer": "store credit only",
+      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "refund after 30 days"}}],
+      "difficulty": "medium"
+    },
+    {
+      "id": "rag-014",
+      "category": "rag",
+      "question": "When must executives be notified for P0 incidents?",
+      "expected_answer": "within 1 hour",
+      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "executive notification P0"}}],
+      "difficulty": "hard"
+    },
+    {
+      "id": "rag-015",
+      "category": "rag",
+      "question": "What characters must a password include?",
+      "expected_answer": "uppercase, lowercase, a number, and a symbol",
+      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "password characters"}}],
+      "difficulty": "medium"
+    },
+
+    {
+      "id": "mcp-001",
+      "category": "mcp",
+      "question": "What does the onboarding document say about security training?",
+      "expected_answer": "within 7 days",
+      "expected_tool_calls": [{"tool": "mcp_read_file", "args": {"path": "docs/onboarding.md"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "mcp-002",
+      "category": "mcp",
+      "question": "How many days per week can employees work remotely?",
+      "expected_answer": "3 days per week",
+      "expected_tool_calls": [{"tool": "mcp_read_file", "args": {"path": "docs/policies/remote-work.md"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "mcp-003",
+      "category": "mcp",
+      "question": "What team is Alice Chen on?",
+      "expected_answer": "platform",
+      "expected_tool_calls": [{"tool": "mcp_get_user", "args": {"user_id": "u-001"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "mcp-004",
+      "category": "mcp",
+      "question": "What is Bob Rivera's role?",
+      "expected_answer": "analyst",
+      "expected_tool_calls": [{"tool": "mcp_get_user", "args": {"user_id": "u-002"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "mcp-005",
+      "category": "mcp",
+      "question": "What is the max_retries value in app config?",
+      "expected_answer": "3",
+      "expected_tool_calls": [{"tool": "mcp_read_file", "args": {"path": "config/app.json"}}],
+      "difficulty": "medium"
+    },
+    {
+      "id": "mcp-006",
+      "category": "mcp",
+      "question": "Search for files mentioning deploy.",
+      "expected_answer": "logs/deploy.txt",
+      "expected_tool_calls": [{"tool": "mcp_search_files", "args": {"query": "deploy"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "mcp-007",
+      "category": "mcp",
+      "question": "Find documents about remote work.",
+      "expected_answer": "docs/policies/remote-work.md",
+      "expected_tool_calls": [{"tool": "mcp_search_files", "args": {"query": "remote"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "mcp-008",
+      "category": "mcp",
+      "question": "Who is the manager on the platform team?",
+      "expected_answer": "Carol Wu",
+      "expected_tool_calls": [{"tool": "mcp_get_user", "args": {"user_id": "u-003"}}],
+      "difficulty": "medium"
+    },
+    {
+      "id": "mcp-009",
+      "category": "mcp",
+      "question": "What environment is configured in app.json?",
+      "expected_answer": "staging",
+      "expected_tool_calls": [{"tool": "mcp_read_file", "args": {"path": "config/app.json"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "mcp-010",
+      "category": "mcp",
+      "question": "Search for onboarding files.",
+      "expected_answer": "docs/onboarding.md",
+      "expected_tool_calls": [{"tool": "mcp_search_files", "args": {"query": "onboarding"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "mcp-011",
+      "category": "mcp",
+      "question": "What team is Carol Wu on?",
+      "expected_answer": "platform",
+      "expected_tool_calls": [{"tool": "mcp_get_user", "args": {"user_id": "u-003"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "mcp-012",
+      "category": "mcp",
+      "question": "Read the remote work policy file.",
+      "expected_answer": "Remote Work",
+      "expected_tool_calls": [{"tool": "mcp_read_file", "args": {"path": "docs/policies/remote-work.md"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "mcp-013",
+      "category": "mcp",
+      "question": "Search for config files.",
+      "expected_answer": "config/app.json",
+      "expected_tool_calls": [{"tool": "mcp_search_files", "args": {"query": "config"}}],
+      "difficulty": "medium"
+    },
+    {
+      "id": "mcp-014",
+      "category": "mcp",
+      "question": "What is Alice Chen's role?",
+      "expected_answer": "engineer",
+      "expected_tool_calls": [{"tool": "mcp_get_user", "args": {"user_id": "u-001"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "mcp-015",
+      "category": "mcp",
+      "question": "When did the most recent deploy succeed according to logs?",
+      "expected_answer": "2026-08-15",
+      "expected_tool_calls": [{"tool": "mcp_read_file", "args": {"path": "logs/deploy.txt"}}],
+      "difficulty": "hard"
+    },
+
+    {
+      "id": "builtin-001",
+      "category": "builtin",
+      "question": "What is 15 * 4 + 10?",
+      "expected_answer": "70",
+      "expected_tool_calls": [{"tool": "calculator", "args": {"expression": "15 * 4 + 10"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "builtin-002",
+      "category": "builtin",
+      "question": "What is the status of order ORD-1001?",
+      "expected_answer": "shipped",
+      "expected_tool_calls": [{"tool": "lookup_order", "args": {"order_id": "ORD-1001"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "builtin-003",
+      "category": "builtin",
+      "question": "What's the weather in Austin today?",
+      "expected_answer": "sunny",
+      "expected_tool_calls": [{"tool": "get_weather", "args": {"city": "Austin"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "builtin-004",
+      "category": "builtin",
+      "question": "How much did order ORD-1002 cost?",
+      "expected_answer": "129",
+      "expected_tool_calls": [{"tool": "lookup_order", "args": {"order_id": "ORD-1002"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "builtin-005",
+      "category": "builtin",
+      "question": "Calculate (100 - 25) / 5.",
+      "expected_answer": "15",
+      "expected_tool_calls": [{"tool": "calculator", "args": {"expression": "(100 - 25) / 5"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "builtin-006",
+      "category": "builtin",
+      "question": "What's the temperature in San Francisco?",
+      "expected_answer": "62",
+      "expected_tool_calls": [{"tool": "get_weather", "args": {"city": "San Francisco"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "builtin-007",
+      "category": "builtin",
+      "question": "What items are in order ORD-1003?",
+      "expected_answer": "widget-a",
+      "expected_tool_calls": [{"tool": "lookup_order", "args": {"order_id": "ORD-1003"}}],
+      "difficulty": "medium"
+    },
+    {
+      "id": "builtin-008",
+      "category": "builtin",
+      "question": "What's the weather like in New York?",
+      "expected_answer": "partly cloudy",
+      "expected_tool_calls": [{"tool": "get_weather", "args": {"city": "New York"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "builtin-009",
+      "category": "builtin",
+      "question": "What is 2.5 * 8?",
+      "expected_answer": "20",
+      "expected_tool_calls": [{"tool": "calculator", "args": {"expression": "2.5 * 8"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "builtin-010",
+      "category": "builtin",
+      "question": "Is order ORD-1002 still pending?",
+      "expected_answer": "pending",
+      "expected_tool_calls": [{"tool": "lookup_order", "args": {"order_id": "ORD-1002"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "builtin-011",
+      "category": "builtin",
+      "question": "What is the total for ORD-1001 in USD?",
+      "expected_answer": "49.99",
+      "expected_tool_calls": [{"tool": "lookup_order", "args": {"order_id": "ORD-1001"}}],
+      "difficulty": "medium"
+    },
+    {
+      "id": "builtin-012",
+      "category": "builtin",
+      "question": "Compute 3 * 3 * 3.",
+      "expected_answer": "27",
+      "expected_tool_calls": [{"tool": "calculator", "args": {"expression": "3 * 3 * 3"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "builtin-013",
+      "category": "builtin",
+      "question": "Has order ORD-1003 been delivered?",
+      "expected_answer": "delivered",
+      "expected_tool_calls": [{"tool": "lookup_order", "args": {"order_id": "ORD-1003"}}],
+      "difficulty": "easy"
+    },
+    {
+      "id": "builtin-014",
+      "category": "builtin",
+      "question": "What's the weather condition in Austin?",
+      "expected_answer": "95",
+      "expected_tool_calls": [{"tool": "get_weather", "args": {"city": "Austin"}}],
+      "difficulty": "medium"
+    },
+    {
+      "id": "builtin-015",
+      "category": "builtin",
+      "question": "Calculate 1000 / 40.",
+      "expected_answer": "25",
+      "expected_tool_calls": [{"tool": "calculator", "args": {"expression": "1000 / 40"}}],
+      "difficulty": "easy"
+    },
+
+    {
+      "id": "multi-001",
+      "category": "multi_step",
+      "question": "Look up order ORD-1001 and tell me if I'm eligible for a full refund.",
+      "expected_answer": "30 days",
+      "expected_tool_calls": [
+        {"tool": "lookup_order", "args": {"order_id": "ORD-1001"}},
+        {"tool": "rag_search", "args": {"query": "refund policy"}}
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi-002",
+      "category": "multi_step",
+      "question": "Read the onboarding doc and tell me which team Alice Chen is on.",
+      "expected_answer": "platform",
+      "expected_tool_calls": [
+        {"tool": "mcp_read_file", "args": {"path": "docs/onboarding.md"}},
+        {"tool": "mcp_get_user", "args": {"user_id": "u-001"}}
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi-003",
+      "category": "multi_step",
+      "question": "What's the weather in San Francisco and what is 62 + 10?",
+      "expected_answer": "72",
+      "expected_tool_calls": [
+        {"tool": "get_weather", "args": {"city": "San Francisco"}},
+        {"tool": "calculator", "args": {"expression": "62 + 10"}}
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "multi-004",
+      "category": "multi_step",
+      "question": "Find the remote work policy and tell me how many remote days are allowed.",
+      "expected_answer": "3 days",
+      "expected_tool_calls": [
+        {"tool": "mcp_search_files", "args": {"query": "remote work"}},
+        {"tool": "mcp_read_file", "args": {"path": "docs/policies/remote-work.md"}}
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi-005",
+      "category": "multi_step",
+      "question": "Check order ORD-1003 status and calculate its total plus 10% tax.",
+      "expected_answer": "21.45",
+      "expected_tool_calls": [
+        {"tool": "lookup_order", "args": {"order_id": "ORD-1003"}},
+        {"tool": "calculator", "args": {"expression": "19.5 * 1.1"}}
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi-006",
+      "category": "multi_step",
+      "question": "Who manages the platform team and what is their user ID?",
+      "expected_answer": "u-003",
+      "expected_tool_calls": [
+        {"tool": "mcp_get_user", "args": {"user_id": "u-003"}}
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "multi-007",
+      "category": "multi_step",
+      "question": "Search for deploy logs and tell me how many successful deploys are recorded.",
+      "expected_answer": "2",
+      "expected_tool_calls": [
+        {"tool": "mcp_search_files", "args": {"query": "deploy"}},
+        {"tool": "mcp_read_file", "args": {"path": "logs/deploy.txt"}}
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi-008",
+      "category": "multi_step",
+      "question": "What are the Enterprise plan features and what is 50 * 100?",
+      "expected_answer": "5000",
+      "expected_tool_calls": [
+        {"tool": "rag_search", "args": {"query": "Enterprise plan"}},
+        {"tool": "calculator", "args": {"expression": "50 * 100"}}
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "multi-009",
+      "category": "multi_step",
+      "question": "Get Bob's team and look up the support hours for that team's timezone reference (Pacific).",
+      "expected_answer": "9am to 6pm Pacific",
+      "expected_tool_calls": [
+        {"tool": "mcp_get_user", "args": {"user_id": "u-002"}},
+        {"tool": "rag_search", "args": {"query": "support hours Pacific"}}
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi-010",
+      "category": "multi_step",
+      "question": "Read app config and multiply max_retries by 10.",
+      "expected_answer": "30",
+      "expected_tool_calls": [
+        {"tool": "mcp_read_file", "args": {"path": "config/app.json"}},
+        {"tool": "calculator", "args": {"expression": "3 * 10"}}
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "multi-011",
+      "category": "multi_step",
+      "question": "What's the shipping SLA for express and what's the weather in New York?",
+      "expected_answer": "1-2 business days",
+      "expected_tool_calls": [
+        {"tool": "rag_search", "args": {"query": "express shipping"}},
+        {"tool": "get_weather", "args": {"city": "New York"}}
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "multi-012",
+      "category": "multi_step",
+      "question": "Look up ORD-1002 and check if express shipping could deliver in time (1-2 days).",
+      "expected_answer": "1-2 business days",
+      "expected_tool_calls": [
+        {"tool": "lookup_order", "args": {"order_id": "ORD-1002"}},
+        {"tool": "rag_search", "args": {"query": "express shipping"}}
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi-013",
+      "category": "multi_step",
+      "question": "Find the password policy and confirm it requires a symbol.",
+      "expected_answer": "symbol",
+      "expected_tool_calls": [
+        {"tool": "rag_search", "args": {"query": "password requirements"}}
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "multi-014",
+      "category": "multi_step",
+      "question": "Get Carol Wu's details and read the onboarding requirements.",
+      "expected_answer": "7 days",
+      "expected_tool_calls": [
+        {"tool": "mcp_get_user", "args": {"user_id": "u-003"}},
+        {"tool": "mcp_read_file", "args": {"path": "docs/onboarding.md"}}
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "multi-015",
+      "category": "multi_step",
+      "question": "Calculate the Pro tier rate limit times 5.",
+      "expected_answer": "5000",
+      "expected_tool_calls": [
+        {"tool": "rag_search", "args": {"query": "Pro tier rate limit"}},
+        {"tool": "calculator", "args": {"expression": "1000 * 5"}}
+      ],
+      "difficulty": "hard"
+    }
+  ]
+}
