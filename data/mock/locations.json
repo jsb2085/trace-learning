@@ -1,0 +1,27 @@
+{
+  "locations": [
+    {"location_id": "A-12-03", "zone": "PICK-FACE", "aisle": "A", "type": "bin", "temperature_controlled": false, "status": "active"},
+    {"location_id": "A-12-04", "zone": "PICK-FACE", "aisle": "A", "type": "bin", "temperature_controlled": false, "status": "active"},
+    {"location_id": "A-04-01", "zone": "PICK-FACE", "aisle": "A", "type": "bin", "temperature_controlled": false, "status": "active"},
+    {"location_id": "B-08-04", "zone": "BULK-A", "aisle": "B", "type": "pallet", "temperature_controlled": false, "status": "active"},
+    {"location_id": "B-08-05", "zone": "BULK-A", "aisle": "B", "type": "pallet", "temperature_controlled": false, "status": "damaged_hold"},
+    {"location_id": "B-14-02", "zone": "BULK-A", "aisle": "B", "type": "bin", "temperature_controlled": false, "status": "active"},
+    {"location_id": "C-02-01", "zone": "COLD", "aisle": "C", "type": "bin", "temperature_controlled": true, "status": "active"},
+    {"location_id": "K-01-02", "zone": "COLD", "aisle": "K", "type": "bin", "temperature_controlled": true, "status": "active"},
+    {"location_id": "R-01-01", "zone": "RECEIVING", "aisle": "R", "type": "staging", "temperature_controlled": false, "status": "active"},
+    {"location_id": "Q-03-01", "zone": "QC-HOLD", "aisle": "Q", "type": "hold", "temperature_controlled": false, "status": "qc_hold"},
+    {"location_id": "S-02-01", "zone": "SHIPPING", "aisle": "S", "type": "dock", "temperature_controlled": false, "status": "active"}
+  ],
+  "bin_contents": [
+    {"location_id": "A-12-03", "sku": "SKU-HVA-4421", "lot_id": "LOT-HV-081", "quantity": 24, "status": "available"},
+    {"location_id": "A-12-04", "sku": "SKU-HVA-4421", "lot_id": "LOT-HV-080", "quantity": 24, "status": "available"},
+    {"location_id": "A-04-01", "sku": "SKU-FST-M8", "lot_id": "LOT-FS-220", "quantity": 15, "status": "allocated"},
+    {"location_id": "B-08-04", "sku": "SKU-BKT-3309", "lot_id": "LOT-BK-210", "quantity": 120, "status": "available"},
+    {"location_id": "B-08-05", "sku": "SKU-BKT-3309", "lot_id": "LOT-BK-209", "quantity": 40, "status": "damaged"},
+    {"location_id": "B-14-02", "sku": "SKU-CTL-9901", "lot_id": "LOT-IC-009", "quantity": 4, "status": "available"},
+    {"location_id": "C-02-01", "sku": "SKU-GR-7782", "lot_id": "LOT-GR-044", "quantity": 6, "status": "available"},
+    {"location_id": "K-01-02", "sku": "SKU-COLD-110", "lot_id": "LOT-CD-019", "quantity": 24, "status": "available"},
+    {"location_id": "R-01-01", "sku": "SKU-FST-M8", "lot_id": "LOT-FS-221", "quantity": 200, "status": "receiving"},
+    {"location_id": "Q-03-01", "sku": "SKU-GR-7782", "lot_id": "LOT-GR-043", "quantity": 2, "status": "qc_hold"}
+  ]
+}

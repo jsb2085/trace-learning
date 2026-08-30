@@ -1,0 +1,68 @@
+{
+  "workers": [
+    {
+      "worker_id": "WK-001",
+      "name": "Alice Chen",
+      "role": "picker",
+      "shift": "day",
+      "certifications": ["hazmat", "reach_truck"],
+      "assigned_picks": ["PK-5001", "PK-5004"]
+    },
+    {
+      "worker_id": "WK-002",
+      "name": "Bob Rivera",
+      "role": "picker",
+      "shift": "day",
+      "certifications": ["cold_chain", "forklift"],
+      "assigned_picks": ["PK-5002", "PK-5007"]
+    },
+    {
+      "worker_id": "WK-003",
+      "name": "Carol Wu",
+      "role": "lead",
+      "shift": "day",
+      "certifications": ["hazmat", "cold_chain", "forklift"],
+      "assigned_picks": ["PK-5005"]
+    },
+    {
+      "worker_id": "WK-004",
+      "name": "Diego Santos",
+      "role": "receiver",
+      "shift": "day",
+      "certifications": ["forklift"],
+      "assigned_picks": []
+    }
+  ],
+  "replenishment_tasks": [
+    {
+      "task_id": "RPL-1001",
+      "sku": "SKU-FST-M8",
+      "from_location": "R-01-01",
+      "to_location": "A-04-01",
+      "zone": "PICK-FACE",
+      "status": "blocked",
+      "block_reason": "equipment_unavailable",
+      "priority": "P1"
+    },
+    {
+      "task_id": "RPL-1002",
+      "sku": "SKU-BKT-3309",
+      "from_location": "B-08-04",
+      "to_location": "A-15-01",
+      "zone": "PICK-FACE",
+      "status": "open",
+      "block_reason": null,
+      "priority": "P2"
+    },
+    {
+      "task_id": "RPL-1003",
+      "sku": "SKU-GR-7782",
+      "from_location": "C-02-01",
+      "to_location": "K-01-01",
+      "zone": "COLD",
+      "status": "in_progress",
+      "block_reason": null,
+      "priority": "P2"
+    }
+  ]
+}

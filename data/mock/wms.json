@@ -1,0 +1,97 @@
+{
+  "work_orders": [
+    {
+      "work_order_id": "WO-7001",
+      "type": "replenishment",
+      "status": "blocked",
+      "related_task_id": "RPL-1001",
+      "zone": "PICK-FACE",
+      "owner_worker_id": "WK-004",
+      "notes": "Forklift FL-02 down — waiting for maintenance"
+    },
+    {
+      "work_order_id": "WO-7002",
+      "type": "cycle_count",
+      "status": "open",
+      "related_location": "B-08-05",
+      "zone": "BULK-A",
+      "owner_worker_id": "WK-003",
+      "notes": "Variance detected after damage report INC-8002"
+    },
+    {
+      "work_order_id": "WO-7003",
+      "type": "cold_chain_check",
+      "status": "in_progress",
+      "related_pick_id": "PK-5002",
+      "zone": "COLD",
+      "owner_worker_id": "WK-002",
+      "notes": "Verify cold items before pick completion"
+    }
+  ],
+  "incidents": [
+    {
+      "incident_id": "INC-8001",
+      "type": "equipment",
+      "status": "open",
+      "zone": "PICK-FACE",
+      "equipment_id": "FL-02",
+      "subject": "Forklift FL-02 hydraulic leak",
+      "notes": "Blocking replenishment to aisle A",
+      "related_work_order_id": "WO-7001"
+    },
+    {
+      "incident_id": "INC-8002",
+      "type": "damage",
+      "status": "investigating",
+      "zone": "BULK-A",
+      "location_id": "B-08-05",
+      "subject": "Damaged pallet at B-08-05",
+      "notes": "40 units SKU-BKT-3309 lot LOT-BK-209 unsalvageable",
+      "related_lot_id": "LOT-BK-209"
+    },
+    {
+      "incident_id": "INC-8003",
+      "type": "pick_delay",
+      "status": "open",
+      "zone": "COLD",
+      "related_pick_id": "PK-5002",
+      "subject": "PK-5002 blocked — cold chain cert required",
+      "notes": "Worker WK-002 certified; QC rework caused delay",
+      "related_lot_id": "LOT-GR-044"
+    },
+    {
+      "incident_id": "INC-8004",
+      "type": "hazmat",
+      "status": "monitoring",
+      "zone": "BULK-A",
+      "related_pick_id": "PK-5007",
+      "subject": "Hazmat pick PK-5007 requires escort",
+      "notes": "Only WK-001 and WK-003 hazmat certified on day shift"
+    },
+    {
+      "incident_id": "INC-8005",
+      "type": "inventory",
+      "status": "open",
+      "zone": "PICK-FACE",
+      "related_pick_id": "PK-5001",
+      "subject": "SKU-FST-M8 stockout blocking pick completion",
+      "notes": "PK-5001 line 2 complete but line 1 waiting on replenishment",
+      "related_sku": "SKU-HVA-4421"
+    }
+  ],
+  "equipment": [
+    {"equipment_id": "FL-01", "type": "forklift", "zone": "BULK-A", "status": "available"},
+    {"equipment_id": "FL-02", "type": "forklift", "zone": "PICK-FACE", "status": "down"},
+    {"equipment_id": "FL-03", "type": "forklift", "zone": "COLD", "status": "available"},
+    {"equipment_id": "RT-01", "type": "reach_truck", "zone": "BULK-A", "status": "available"}
+  ],
+  "shifts": [
+    {
+      "shift_id": "SHIFT-DAY",
+      "name": "Day Shift",
+      "start": "06:00",
+      "end": "14:00",
+      "roster": ["WK-001", "WK-002", "WK-003", "WK-004"]
+    }
+  ]
+}

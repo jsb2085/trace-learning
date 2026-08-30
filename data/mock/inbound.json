@@ -1,0 +1,50 @@
+{
+  "inbound": [
+    {
+      "inbound_id": "INB-3000",
+      "supplier": "SteelCo",
+      "status": "putaway_complete",
+      "expected_arrival": "2026-08-15",
+      "received_at": "2026-08-15",
+      "planned_putaway_zone": "BULK-A",
+      "line_items": [{"sku": "SKU-BKT-3309", "quantity": 160, "lot_id": "LOT-BK-210"}]
+    },
+    {
+      "inbound_id": "INB-3001",
+      "supplier": "GearWorks",
+      "status": "putaway_complete",
+      "expected_arrival": "2026-08-18",
+      "received_at": "2026-08-18",
+      "planned_putaway_zone": "COLD",
+      "line_items": [{"sku": "SKU-GR-7782", "quantity": 8, "lot_id": "LOT-GR-044"}]
+    },
+    {
+      "inbound_id": "INB-3002",
+      "supplier": "HydroInc",
+      "status": "putaway_complete",
+      "expected_arrival": "2026-08-20",
+      "received_at": "2026-08-20",
+      "planned_putaway_zone": "PICK-FACE",
+      "line_items": [{"sku": "SKU-HVA-4421", "quantity": 48, "lot_id": "LOT-HV-081"}]
+    },
+    {
+      "inbound_id": "INB-3003",
+      "supplier": "ChemCold",
+      "status": "putaway_complete",
+      "expected_arrival": "2026-08-24",
+      "received_at": "2026-08-24",
+      "planned_putaway_zone": "COLD",
+      "line_items": [{"sku": "SKU-COLD-110", "quantity": 24, "lot_id": "LOT-CD-019"}]
+    },
+    {
+      "inbound_id": "INB-3004",
+      "supplier": "FastenerPro",
+      "status": "receiving",
+      "expected_arrival": "2026-08-30",
+      "received_at": null,
+      "planned_putaway_zone": "PICK-FACE",
+      "staging_location": "R-01-01",
+      "line_items": [{"sku": "SKU-FST-M8", "quantity": 200, "lot_id": "LOT-FS-221"}]
+    }
+  ]
+}

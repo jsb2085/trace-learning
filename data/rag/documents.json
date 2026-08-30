@@ -1,0 +1,54 @@
+{
+  "documents": [
+    {
+      "id": "doc-001",
+      "title": "Overdue Pick Definition",
+      "body": "A pick order is overdue when the warehouse reference date is after its ship_by date and status is not 'shipped'. Overdue express picks require supervisor notification within 1 hour."
+    },
+    {
+      "id": "doc-002",
+      "title": "Ship-By SLA",
+      "body": "Standard picks must ship by end of day on ship_by date. Express picks must ship by 2pm on ship_by date. Carrier cutoff for express is 3pm."
+    },
+    {
+      "id": "doc-003",
+      "title": "Lot Traceability SOP",
+      "body": "To trace a SKU, pull lot events with wh_get_lot_trace, cross-reference open picks with wh_find_picks_by_sku, and check for qc_failed or damage_reported events."
+    },
+    {
+      "id": "doc-004",
+      "title": "Cold Chain Compliance",
+      "body": "Cold chain SKUs must be picked within 30 minutes of cold zone exit. Workers need cold_chain certification. Verify temp_check_passed on lot before pick."
+    },
+    {
+      "id": "doc-005",
+      "title": "Hazmat Pick Rules",
+      "body": "Hazmat SKUs require a hazmat-certified picker on the active shift. A lead must escort for first pick of the day. Check wms_get_shift_roster for certifications."
+    },
+    {
+      "id": "doc-006",
+      "title": "Replenishment SOP",
+      "body": "Blocked replenishment tasks must be linked to a work order. Check equipment availability in the zone before assigning. Forklift down status blocks aisle A replenishment."
+    },
+    {
+      "id": "doc-007",
+      "title": "Putaway Rules",
+      "body": "Inbound receipts must be put away within 24 hours. Cold items within 30 minutes. Planned putaway zone is on the inbound record. Staging default is R-01-01."
+    },
+    {
+      "id": "doc-008",
+      "title": "Zone Routing",
+      "body": "Pick routes list zones in sequence. COLD zone required when any line item SKU has cold_chain=true. Minimize cold zone entries to one per pick."
+    },
+    {
+      "id": "doc-009",
+      "title": "Damage and Hold Policy",
+      "body": "Locations with status damaged_hold or bin contents with status damaged cannot be picked. Quarantine affected lots and open an incident. Cycle count required before release."
+    },
+    {
+      "id": "doc-010",
+      "title": "Equipment Assignment",
+      "body": "Each zone has assigned forklifts and reach trucks. Equipment with status 'down' blocks replenishment work orders in that zone until maintenance clears it."
+    }
+  ]
+}
