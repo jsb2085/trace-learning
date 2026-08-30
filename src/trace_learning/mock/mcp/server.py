@@ -1,15 +1,15 @@
-"""Mock MCP server stub (for future real MCP integration)."""
+"""Mock MCP server stub for WMS integration."""
 
 from __future__ import annotations
 
-from trace_learning.mock.mcp.tools import get_mcp_tools
+from trace_learning.mock.mcp.tools import get_wms_tools
 
 
 class MockMCPServer:
-    """Placeholder MCP server for tickets and internal user directory."""
+    """Placeholder WMS MCP server for work orders, incidents, and equipment."""
 
     def __init__(self) -> None:
-        self.tools = get_mcp_tools()
+        self.tools = get_wms_tools()
 
     def list_tools(self) -> list[dict]:
         return [{"name": t.name, "description": t.description} for t in self.tools]
@@ -18,4 +18,4 @@ class MockMCPServer:
         for tool in self.tools:
             if tool.name == name:
                 return str(tool.invoke(arguments))
-        raise ValueError(f"Unknown MCP tool: {name}")
+        raise ValueError(f"Unknown WMS tool: {name}")

@@ -1,64 +1,74 @@
 {
   "workflows": [
     {
-      "id": "wf-late-orders",
-      "name": "Late Order Identification",
-      "description": "Look up late-order policy then query ops for orders past promised delivery",
-      "trigger_patterns": ["orders are late", "late as of", "which orders are late"],
-      "expected_tools": ["rag_search", "ops_find_late_orders"],
+      "id": "wf-overdue-picks",
+      "name": "Overdue Pick Identification",
+      "description": "Policy lookup, warehouse date, overdue query, worker check",
+      "trigger_patterns": ["pick orders are overdue", "overdue as of", "which picks are late"],
+      "expected_tools": ["rag_search", "wh_get_warehouse_date", "wh_find_overdue_picks", "wh_get_worker"],
       "nodes": [
         {"id": "start", "type": "start", "label": "Start"},
-        {"id": "policy", "type": "tool", "label": "Get late order policy", "tool_name": "rag_search"},
-        {"id": "query", "type": "tool", "label": "Find late orders", "tool_name": "ops_find_late_orders"},
-        {"id": "summarize", "type": "llm", "label": "Summarize late orders"},
+        {"id": "policy", "type": "tool", "label": "Overdue policy", "tool_name": "rag_search"},
+        {"id": "date", "type": "tool", "label": "Warehouse date", "tool_name": "wh_get_warehouse_date"},
+        {"id": "query", "type": "tool", "label": "Find overdue picks", "tool_name": "wh_find_overdue_picks"},
+        {"id": "worker", "type": "tool", "label": "Check assigned worker", "tool_name": "wh_get_worker"},
+        {"id": "summarize", "type": "llm", "label": "Summarize"},
         {"id": "end", "type": "end", "label": "End"}
       ],
       "edges": [
         {"source": "start", "target": "policy"},
-        {"source": "policy", "target": "query"},
-        {"source": "query", "target": "summarize"},
+        {"source": "policy", "target": "date"},
+        {"source": "date", "target": "query"},
+        {"source": "query", "target": "worker"},
+        {"source": "worker", "target": "summarize"},
         {"source": "summarize", "target": "end"}
       ]
     },
     {
-      "id": "wf-part-investigation",
-      "name": "Part History Investigation",
-      "description": "Trace a part's event timeline and linked orders",
-      "trigger_patterns": ["what happened to part", "part history", "trace part"],
-      "expected_tools": ["ops_get_part_history", "ops_find_orders_by_part"],
+      "id": "wf-sku-trace",
+      "name": "SKU Lot Traceability",
+      "description": "Trace SKU through lots, picks, and SOP",
+      "trigger_patterns": ["what happened to sku", "trace sku", "sku history"],
+      "expected_tools": ["wh_get_sku", "wh_get_lot_trace", "wh_find_picks_by_sku", "rag_search"],
       "nodes": [
         {"id": "start", "type": "start", "label": "Start"},
-        {"id": "history", "type": "tool", "label": "Part timeline", "tool_name": "ops_get_part_history"},
-        {"id": "orders", "type": "tool", "label": "Linked orders", "tool_name": "ops_find_orders_by_part"},
-        {"id": "report", "type": "llm", "label": "Explain events"},
+        {"id": "sku", "type": "tool", "label": "SKU master", "tool_name": "wh_get_sku"},
+        {"id": "lot", "type": "tool", "label": "Lot timeline", "tool_name": "wh_get_lot_trace"},
+        {"id": "picks", "type": "tool", "label": "Open picks", "tool_name": "wh_find_picks_by_sku"},
+        {"id": "sop", "type": "tool", "label": "Traceability SOP", "tool_name": "rag_search"},
+        {"id": "report", "type": "llm", "label": "Explain"},
         {"id": "end", "type": "end", "label": "End"}
       ],
       "edges": [
-        {"source": "start", "target": "history"},
-        {"source": "history", "target": "orders"},
-        {"source": "orders", "target": "report"},
+        {"source": "start", "target": "sku"},
+        {"source": "sku", "target": "lot"},
+        {"source": "lot", "target": "picks"},
+        {"source": "picks", "target": "sop"},
+        {"source": "sop", "target": "report"},
         {"source": "report", "target": "end"}
       ]
     },
     {
-      "id": "wf-order-delay",
-      "name": "Order Delay Root Cause",
-      "description": "Investigate order delay via shipment and part events",
-      "trigger_patterns": ["why is order", "delayed", "order delay"],
-      "expected_tools": ["ops_get_order", "ops_get_shipment", "ops_get_part_history"],
+      "id": "wf-pick-delay",
+      "name": "Pick Delay Investigation",
+      "description": "Diagnose delayed picks across floor and WMS",
+      "trigger_patterns": ["why is pick", "pick delayed", "pick order delayed"],
+      "expected_tools": ["wh_get_pick_order", "wh_get_lot_trace", "wms_search_incidents", "wh_get_worker_assignments"],
       "nodes": [
         {"id": "start", "type": "start", "label": "Start"},
-        {"id": "order", "type": "tool", "label": "Get order", "tool_name": "ops_get_order"},
-        {"id": "shipment", "type": "tool", "label": "Shipment status", "tool_name": "ops_get_shipment"},
-        {"id": "parts", "type": "tool", "label": "Part events", "tool_name": "ops_get_part_history"},
-        {"id": "diagnose", "type": "llm", "label": "Diagnose delay"},
+        {"id": "pick", "type": "tool", "label": "Pick order", "tool_name": "wh_get_pick_order"},
+        {"id": "lot", "type": "tool", "label": "Lot events", "tool_name": "wh_get_lot_trace"},
+        {"id": "incidents", "type": "tool", "label": "Incidents", "tool_name": "wms_search_incidents"},
+        {"id": "worker", "type": "tool", "label": "Worker load", "tool_name": "wh_get_worker_assignments"},
+        {"id": "diagnose", "type": "llm", "label": "Root cause"},
         {"id": "end", "type": "end", "label": "End"}
       ],
       "edges": [
-        {"source": "start", "target": "order"},
-        {"source": "order", "target": "shipment"},
-        {"source": "shipment", "target": "parts"},
-        {"source": "parts", "target": "diagnose"},
+        {"source": "start", "target": "pick"},
+        {"source": "pick", "target": "lot"},
+        {"source": "lot", "target": "incidents"},
+        {"source": "incidents", "target": "worker"},
+        {"source": "worker", "target": "diagnose"},
         {"source": "diagnose", "target": "end"}
       ]
     }

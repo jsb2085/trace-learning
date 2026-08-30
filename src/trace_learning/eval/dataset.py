@@ -1,8 +1,4 @@
-"""Eval dataset schema and loader.
-
-Questions are instances of reusable templates with parameterized inputs.
-Every question requires 2+ tool calls across ops, RAG, and/or MCP.
-"""
+"""Eval dataset schema — warehouse agent parameterized multi-tool questions."""
 
 from __future__ import annotations
 
@@ -19,13 +15,14 @@ DEFAULT_DATASET_PATH = EVAL_DATA_DIR / "questions.json"
 DEFAULT_TEMPLATES_PATH = EVAL_DATA_DIR / "templates.json"
 
 TARGET_QUESTION_COUNT = 60
+MIN_TOOL_CALLS = 3
 
 
 class QuestionCategory(str, Enum):
-    FULFILLMENT = "fulfillment"
-    PARTS_TRACE = "parts_trace"
-    POLICY = "policy"
-    SUPPORT = "support"
+    OUTBOUND = "outbound"
+    INBOUND = "inbound"
+    INVENTORY = "inventory"
+    OPERATIONS = "operations"
 
 
 class ExpectedToolCall(BaseModel):
@@ -35,14 +32,11 @@ class ExpectedToolCall(BaseModel):
 
 class QuestionTemplate(BaseModel):
     id: str
-    template: str = Field(description="Parameterized question, e.g. 'What happened to part {part_number}?'")
+    template: str
     category: QuestionCategory
     description: str = ""
-    min_tool_calls: int = 2
-    required_tool_groups: list[str] = Field(
-        default_factory=list,
-        description="Tool groups that must appear, e.g. ['ops', 'rag']",
-    )
+    min_tool_calls: int = MIN_TOOL_CALLS
+    required_tool_groups: list[str] = Field(default_factory=list)
 
     def render(self, params: dict[str, Any]) -> str:
         question = self.template
@@ -61,20 +55,20 @@ class EvalQuestion(BaseModel):
     category: QuestionCategory
     expected_answer: str
     expected_tool_calls: list[ExpectedToolCall] = Field(default_factory=list)
-    min_tool_calls: int = 2
+    min_tool_calls: int = MIN_TOOL_CALLS
     workflow_id: str | None = None
     difficulty: Literal["easy", "medium", "hard"] = "medium"
     notes: str = ""
 
     @model_validator(mode="after")
     def _validate_multi_tool(self) -> EvalQuestion:
-        if len(self.expected_tool_calls) < 2:
-            raise ValueError(f"{self.id} must declare at least 2 expected tool calls")
+        if len(self.expected_tool_calls) < MIN_TOOL_CALLS:
+            raise ValueError(f"{self.id} must declare at least {MIN_TOOL_CALLS} expected tool calls")
         return self
 
 
 class EvalDataset(BaseModel):
-    version: str = "0.2.0"
+    version: str = "0.3.0"
     description: str = ""
     templates: list[QuestionTemplate] = Field(default_factory=list)
     questions: list[EvalQuestion]
@@ -118,9 +112,11 @@ class EvalDataset(BaseModel):
     def coverage_report(self) -> dict[str, Any]:
         category_counts: dict[str, int] = {c.value: 0 for c in QuestionCategory}
         template_counts: dict[str, int] = {}
+        tool_call_counts: list[int] = []
         for q in self.questions:
             category_counts[q.category.value] += 1
             template_counts[q.template_id] = template_counts.get(q.template_id, 0) + 1
+            tool_call_counts.append(len(q.expected_tool_calls))
         return {
             "total": len(self.questions),
             "target": TARGET_QUESTION_COUNT,
@@ -128,4 +124,9 @@ class EvalDataset(BaseModel):
             "by_category": category_counts,
             "by_template": template_counts,
             "unique_templates": len(template_counts),
+            "avg_tool_calls": round(sum(tool_call_counts) / len(tool_call_counts), 2)
+            if tool_call_counts
+            else 0,
+            "min_tool_calls": min(tool_call_counts) if tool_call_counts else 0,
+            "max_tool_calls": max(tool_call_counts) if tool_call_counts else 0,
         }

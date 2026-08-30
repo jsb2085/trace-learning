@@ -2,43 +2,53 @@
   "documents": [
     {
       "id": "doc-001",
-      "title": "Late Order Definition",
-      "body": "An order is considered late when today's date is after its promised_delivery date and the order status is not 'delivered'. Orders on hold follow separate escalation rules."
+      "title": "Overdue Pick Definition",
+      "body": "A pick order is overdue when the warehouse reference date is after its ship_by date and status is not 'shipped'. Overdue express picks require supervisor notification within 1 hour."
     },
     {
       "id": "doc-002",
-      "title": "Shipping SLA",
-      "body": "Standard shipping: promised delivery is 5-7 business days from order creation. Express shipping: 1-2 business days. Carrier delays after ship date do not reset the promised delivery clock."
+      "title": "Ship-By SLA",
+      "body": "Standard picks must ship by end of day on ship_by date. Express picks must ship by 2pm on ship_by date. Carrier cutoff for express is 3pm."
     },
     {
       "id": "doc-003",
-      "title": "Refund Policy",
-      "body": "Full refund within 30 days of order creation if not delivered. Partial refund for late delivery after 3+ days late if customer requests. Delivered orders are eligible for return within 14 days."
+      "title": "Lot Traceability SOP",
+      "body": "To trace a SKU, pull lot events with wh_get_lot_trace, cross-reference open picks with wh_find_picks_by_sku, and check for qc_failed or damage_reported events."
     },
     {
       "id": "doc-004",
-      "title": "QC Failure Escalation",
-      "body": "When a part fails QC, a quality ticket must be opened. Reworked parts require a second QC pass before allocation. Downstream orders may be delayed if rework exceeds 48 hours."
+      "title": "Cold Chain Compliance",
+      "body": "Cold chain SKUs must be picked within 30 minutes of cold zone exit. Workers need cold_chain certification. Verify temp_check_passed on lot before pick."
     },
     {
       "id": "doc-005",
-      "title": "Inventory Allocation Rules",
-      "body": "Orders in 'processing' require available inventory for all line items. If available is zero, the order waits for next_restock_date. Partial allocation is allowed only for non-critical parts marked in the catalog."
+      "title": "Hazmat Pick Rules",
+      "body": "Hazmat SKUs require a hazmat-certified picker on the active shift. A lead must escort for first pick of the day. Check wms_get_shift_roster for certifications."
     },
     {
       "id": "doc-006",
-      "title": "Order Hold Policy",
-      "body": "Orders on hold cannot ship until hold_reason is resolved. Common reasons: payment_verification, fraud_review, address_confirmation. Support must update the customer within 24 hours."
+      "title": "Replenishment SOP",
+      "body": "Blocked replenishment tasks must be linked to a work order. Check equipment availability in the zone before assigning. Forklift down status blocks aisle A replenishment."
     },
     {
       "id": "doc-007",
-      "title": "Escalation Matrix",
-      "body": "P1 tickets require fulfillment manager ownership. P2 tickets go to the assigned engineer. Lookup ticket owner via mcp_get_user after fetching the ticket."
+      "title": "Putaway Rules",
+      "body": "Inbound receipts must be put away within 24 hours. Cold items within 30 minutes. Planned putaway zone is on the inbound record. Staging default is R-01-01."
     },
     {
       "id": "doc-008",
-      "title": "Part Traceability",
-      "body": "To explain part delays, retrieve the full event timeline with ops_get_part_history, then cross-reference active orders via ops_find_orders_by_part. Look for qc_failed, delay_logged, and rework_started events."
+      "title": "Zone Routing",
+      "body": "Pick routes list zones in sequence. COLD zone required when any line item SKU has cold_chain=true. Minimize cold zone entries to one per pick."
+    },
+    {
+      "id": "doc-009",
+      "title": "Damage and Hold Policy",
+      "body": "Locations with status damaged_hold or bin contents with status damaged cannot be picked. Quarantine affected lots and open an incident. Cycle count required before release."
+    },
+    {
+      "id": "doc-010",
+      "title": "Equipment Assignment",
+      "body": "Each zone has assigned forklifts and reach trucks. Equipment with status 'down' blocks replenishment work orders in that zone until maintenance clears it."
     }
   ]
 }

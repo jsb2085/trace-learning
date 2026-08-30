@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Interactive CLI for the deep agent."""
+"""Interactive CLI for the warehouse agent."""
 
 from __future__ import annotations
 
@@ -8,26 +8,26 @@ import os
 
 from dotenv import load_dotenv
 
-from trace_learning.agent.deep_agent import create_deep_agent
+from trace_learning.agent.warehouse_agent import create_warehouse_agent
 
 
 def main() -> None:
     load_dotenv()
-    parser = argparse.ArgumentParser(description="Run the trace-learning deep agent")
+    parser = argparse.ArgumentParser(description="Run the trace-learning warehouse agent")
     parser.add_argument("question", nargs="?", help="Question to ask (omit for REPL)")
     args = parser.parse_args()
 
     if not os.getenv("OPENAI_API_KEY"):
         print("Warning: OPENAI_API_KEY not set. Copy .env.example to .env and add your key.")
 
-    agent = create_deep_agent()
+    agent = create_warehouse_agent()
 
     if args.question:
         result = agent.invoke(args.question)
         print(result["messages"][-1].content)
         return
 
-    print("Trace Learning Agent (type 'quit' to exit)")
+    print("Warehouse Agent — WH-EAST (type 'quit' to exit)")
     print(f"Tools: {[t.name for t in agent.tools]}\n")
     while True:
         try:

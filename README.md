@@ -1,38 +1,36 @@
-# Trace Learning
+# Trace Learning — Warehouse Agent
 
-Experimental project for building a **deep agent** that learns and replays multi-tool workflows to reduce token usage and improve accuracy.
+Experimental **warehouse operations agent** that learns and replays multi-tool workflows to reduce token usage and improve pick/inventory accuracy.
 
-## Goals
+## What it does
 
-1. **Deep agent** — LangGraph ReAct agent combining ops tools, MCP tickets/users, RAG policies, and utilities
-2. **Parameterized eval** — 60 question instances from 15 reusable templates with varying inputs
-3. **Workflow graph** — Capture multi-step tool patterns (e.g. policy lookup → ops query → synthesis)
-4. **Trace learning** — Learn workflows from agent traces to skip re-reasoning on repeat patterns
+The agent manages **WH-EAST**, a mock warehouse with outbound picks, inbound receipts, bin locations, lot traceability, workers, and WMS incidents. Every eval question requires **3–4 tool calls** across floor tools, WMS MCP, RAG SOPs, and utilities.
 
 ## Project Structure
 
 ```
 trace-learning/
 ├── data/
-│   ├── mock/                   # Domain data (orders, parts, shipments, inventory, tickets)
+│   ├── mock/                   # Warehouse domain data
+│   │   ├── warehouse.json      # Reference date, warehouse ID
+│   │   ├── pick_orders.json    # Outbound picks
+│   │   ├── skus.json           # SKU master
+│   │   ├── locations.json      # Bins, zones, contents
+│   │   ├── lots.json           # Lot event timelines
+│   │   ├── inbound.json        # ASNs / receipts
+│   │   ├── workers.json        # Pickers, replen tasks
+│   │   └── wms.json            # Work orders, incidents, equipment
 │   ├── eval/
-│   │   ├── templates.json      # 15 reusable question templates
-│   │   ├── questions.json      # 60 instances (template + params + expected tools)
-│   │   └── results/
+│   │   ├── templates.json      # 15 parameterized question templates
+│   │   └── questions.json      # 60 instances (4 tools each)
 │   ├── graph/workflows.json
-│   └── rag/documents.json      # Policy docs (SLA, refunds, QC, holds)
+│   └── rag/documents.json      # Warehouse SOPs
 ├── src/trace_learning/
-│   ├── agent/
-│   ├── eval/
-│   ├── graph/
-│   └── mock/
-│       ├── data/               # JSON loaders
-│       ├── ops/                # Orders, parts, shipments, inventory
-│       ├── mcp/                # Tickets + user directory
-│       ├── rag/
-│       └── tools/              # days_between, calculator
-├── scripts/generate_eval_dataset.py
-└── tests/
+│   ├── agent/warehouse_agent.py
+│   ├── mock/wh/                # Floor tools (wh_*)
+│   ├── mock/mcp/               # WMS tools (wms_*)
+│   └── mock/rag/               # SOP search
+└── scripts/generate_eval_dataset.py
 ```
 
 ## Quick Start
@@ -43,70 +41,49 @@ pip install -e ".[dev]"
 cp .env.example .env   # add OPENAI_API_KEY
 
 python3 -m pytest -v
-trace-agent "What orders are late as of 2026-08-30?"
-trace-eval --id late-orders-001
+trace-agent "Which pick orders are overdue as of 2026-08-30?"
+trace-eval --id overdue-picks-001
 ```
 
-## Mock Capabilities
+## Tool Groups
 
-All data is deterministic under a fixed business date (`2026-08-30`).
+| Group | Prefix | Examples |
+|-------|--------|----------|
+| **Floor** | `wh_*` | `wh_get_pick_order`, `wh_find_overdue_picks`, `wh_get_lot_trace`, `wh_get_bin_contents` |
+| **WMS (MCP)** | `wms_*` | `wms_search_incidents`, `wms_get_work_order`, `wms_list_equipment_by_zone` |
+| **RAG** | `rag_search` | Overdue pick rules, cold chain SOP, hazmat rules, putaway policy |
+| **Utils** | — | `days_between`, `calculator` |
 
-| Group | Tools | Purpose |
-|-------|-------|---------|
-| **Ops** | `ops_query_orders`, `ops_get_order`, `ops_get_part_history`, `ops_get_shipment`, `ops_get_inventory`, `ops_find_orders_by_part`, `ops_find_late_orders`, `ops_get_business_date` | Fulfillment domain |
-| **MCP** | `mcp_get_ticket`, `mcp_search_tickets`, `mcp_get_user` | Support tickets + owners |
-| **RAG** | `rag_search` | Policy docs (late orders, refunds, QC, inventory) |
-| **Utils** | `days_between`, `calculator` | Date math for SLA questions |
+## Eval Design
 
-## Eval Dataset Design
+**15 templates × 4 input variants = 60 questions.** Each instance declares **4 expected tool calls**.
 
-Questions are **not** one-shot RAG or MCP lookups. Each instance requires **2+ tools** across groups.
+| Template | Example |
+|----------|---------|
+| `Which pick orders are overdue as of {as_of_date}?` | RAG → date → overdue query → worker |
+| `What happened to SKU {sku} in the warehouse?` | SKU → lot trace → open picks → SOP |
+| `Why is pick order {pick_id} delayed?` | Pick → lot → incidents → worker assignments |
+| `Can pick order {pick_id} be picked safely on the current shift?` | Pick → hazmat SKU → shift roster → SOP |
 
-### Templates (reusable, parameterized)
-
-Examples from `data/eval/templates.json`:
-
-| Template | Example instance |
-|----------|------------------|
-| `What orders are late as of {as_of_date}?` | `2026-08-30` → ORD-2001, ORD-2002, ORD-2005, ORD-2008 |
-| `What happened to part {part_number}?` | `PN-7782` → QC failure, rework, carrier delay |
-| `Why is order {order_id} delayed?` | `ORD-2008` → customs hold + failed delivery |
-| `What is blocking fulfillment of order {order_id}?` | `ORD-2003` → PN-1100 stockout |
-
-15 templates × 4 input variants = **60 instances**.
-
-### Categories
-
-| Category | Count | Example workflow |
-|----------|-------|------------------|
-| `fulfillment` | 20 | RAG late policy → `ops_find_late_orders` |
-| `parts_trace` | 16 | `ops_get_part_history` → `ops_find_orders_by_part` |
-| `policy` | 12 | `ops_get_order` → `rag_search` refund rules |
-| `support` | 12 | `mcp_search_tickets` → `mcp_get_user` |
-
-### Regenerating instances
-
-Edit `scripts/generate_eval_dataset.py` instance specs, then:
+Regenerate after editing instance specs:
 
 ```bash
 python3 scripts/generate_eval_dataset.py
 ```
 
-## Workflow Graph (Next Phase)
+Check coverage:
 
-Example workflows in `data/graph/workflows.json` mirror eval templates:
-
-- **Late Order Identification** — `rag_search` → `ops_find_late_orders`
-- **Part History Investigation** — `ops_get_part_history` → `ops_find_orders_by_part`
-- **Order Delay Root Cause** — order → shipment → part events
+```python
+from trace_learning.eval.dataset import EvalDataset
+print(EvalDataset.load().coverage_report())
+```
 
 ## Roadmap
 
-- [ ] Wire workflow graph into agent execution path
-- [ ] Trace capture during agent runs
-- [ ] Structured eval: tool-call sequence matching (not just answer substring)
-- [ ] Template sampling for eval (randomize params at runtime)
-- [ ] Real MCP server adapter
+- [ ] Wire workflow graph into warehouse agent
+- [ ] Trace capture and workflow learning
+- [ ] Structured tool-call sequence scoring
+- [ ] Runtime template param sampling
 
 ## Development
 

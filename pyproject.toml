@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "trace-learning"
 version = "0.1.0"
-description = "Experimental deep agent with mock MCP, RAG, and workflow graph learning"
+description = "Warehouse operations agent with mock WMS, RAG SOPs, and workflow graph learning"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

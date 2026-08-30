@@ -1,124 +1,124 @@
 {
   "templates": [
     {
-      "id": "late-orders",
-      "template": "What orders are late as of {as_of_date}?",
-      "category": "fulfillment",
-      "description": "Look up late-order policy, then query ops for orders past promised delivery.",
-      "min_tool_calls": 2,
-      "required_tool_groups": ["rag", "ops"]
+      "id": "overdue-picks",
+      "template": "Which pick orders are overdue as of {as_of_date}?",
+      "category": "outbound",
+      "description": "Look up overdue policy, confirm warehouse date, find overdue picks, check assigned worker.",
+      "min_tool_calls": 4,
+      "required_tool_groups": ["rag", "wh"]
     },
     {
-      "id": "part-history",
-      "template": "What happened to part {part_number}?",
-      "category": "parts_trace",
-      "description": "Retrieve part event timeline and cross-reference active orders.",
-      "min_tool_calls": 2,
-      "required_tool_groups": ["ops"]
+      "id": "sku-trace",
+      "template": "What happened to SKU {sku} in the warehouse?",
+      "category": "inventory",
+      "description": "SKU master, lot timeline, open picks, traceability SOP.",
+      "min_tool_calls": 4,
+      "required_tool_groups": ["wh", "rag"]
     },
     {
-      "id": "order-delay-reason",
-      "template": "Why is order {order_id} delayed?",
-      "category": "fulfillment",
-      "description": "Inspect order, shipment scans, and part-level delay events.",
-      "min_tool_calls": 3,
-      "required_tool_groups": ["ops"]
+      "id": "pick-delay",
+      "template": "Why is pick order {pick_id} delayed?",
+      "category": "outbound",
+      "description": "Pick details, lot events, incidents, worker assignments.",
+      "min_tool_calls": 4,
+      "required_tool_groups": ["wh", "wms"]
     },
     {
-      "id": "refund-eligibility",
-      "template": "Is order {order_id} eligible for a full refund?",
-      "category": "policy",
-      "description": "Compare order dates/status against refund policy.",
-      "min_tool_calls": 2,
-      "required_tool_groups": ["ops", "rag"]
+      "id": "bin-audit",
+      "template": "What's in bin {location_id} and is any inventory on hold?",
+      "category": "inventory",
+      "description": "Location metadata, bin contents, SKU check, hold policy.",
+      "min_tool_calls": 4,
+      "required_tool_groups": ["wh", "rag"]
     },
     {
-      "id": "shipment-eta",
-      "template": "When will order {order_id} arrive?",
-      "category": "fulfillment",
-      "description": "Combine shipment tracking with shipping SLA policy.",
-      "min_tool_calls": 3,
-      "required_tool_groups": ["ops", "rag"]
+      "id": "replenishment-block",
+      "template": "What's blocking replenishment in zone {zone}?",
+      "category": "operations",
+      "description": "Replen tasks, work order, equipment status, SOP.",
+      "min_tool_calls": 4,
+      "required_tool_groups": ["wh", "wms", "rag"]
     },
     {
-      "id": "qc-on-order",
-      "template": "Did any parts on order {order_id} fail QC?",
-      "category": "parts_trace",
-      "description": "Walk order line items and inspect part QC events.",
-      "min_tool_calls": 2,
-      "required_tool_groups": ["ops", "rag"]
+      "id": "worker-load",
+      "template": "What picks is worker {worker_id} responsible for and are any overdue?",
+      "category": "operations",
+      "description": "Worker profile, assignments, warehouse date, overdue check.",
+      "min_tool_calls": 4,
+      "required_tool_groups": ["wh"]
     },
     {
-      "id": "inventory-fulfillment",
-      "template": "Can order {order_id} be fulfilled from current inventory?",
-      "category": "policy",
-      "description": "Check line-item inventory availability against allocation rules.",
-      "min_tool_calls": 2,
-      "required_tool_groups": ["ops", "rag"]
+      "id": "inbound-putaway",
+      "template": "What's the status of inbound {inbound_id} and where should it be put away?",
+      "category": "inbound",
+      "description": "Inbound record, SKU, staging location, putaway SOP.",
+      "min_tool_calls": 4,
+      "required_tool_groups": ["wh", "rag"]
     },
     {
-      "id": "ticket-owner",
-      "template": "Who owns ticket {ticket_id} and what is it about?",
-      "category": "support",
-      "description": "Fetch ticket then resolve owner via user directory.",
-      "min_tool_calls": 2,
-      "required_tool_groups": ["mcp"]
+      "id": "pick-route-cold",
+      "template": "Does pick order {pick_id} require entering the cold zone?",
+      "category": "outbound",
+      "description": "Pick lines, SKU cold flag, locations, zone routing SOP.",
+      "min_tool_calls": 4,
+      "required_tool_groups": ["wh", "rag"]
     },
     {
-      "id": "customer-open-orders",
-      "template": "What non-delivered orders does customer {customer_id} have?",
-      "category": "fulfillment",
-      "description": "Query orders by customer and filter out delivered status.",
-      "min_tool_calls": 2,
-      "required_tool_groups": ["ops"]
+      "id": "damage-impact",
+      "template": "Is damaged inventory affecting pick order {pick_id}?",
+      "category": "inventory",
+      "description": "Pick order, incidents, bin contents, lot trace.",
+      "min_tool_calls": 4,
+      "required_tool_groups": ["wh", "wms"]
     },
     {
-      "id": "orders-with-part",
-      "template": "Which orders include part {part_number} and what are their statuses?",
-      "category": "parts_trace",
-      "description": "Find orders by part number and summarize status.",
-      "min_tool_calls": 2,
-      "required_tool_groups": ["ops"]
+      "id": "ship-by-risk",
+      "template": "Will pick order {pick_id} miss its ship-by date?",
+      "category": "outbound",
+      "description": "Pick order, warehouse date, incidents, days calculation.",
+      "min_tool_calls": 4,
+      "required_tool_groups": ["wh", "wms"]
     },
     {
-      "id": "days-late",
-      "template": "How many days late is order {order_id} as of {as_of_date}?",
-      "category": "fulfillment",
-      "description": "Get order promised date, business rules, and compute day delta.",
-      "min_tool_calls": 3,
-      "required_tool_groups": ["ops", "rag"]
+      "id": "lot-recall",
+      "template": "Which pick orders include lot {lot_id} and what's the lot history?",
+      "category": "inventory",
+      "description": "Find picks by lot, lot trace, pick detail, recall SOP.",
+      "min_tool_calls": 4,
+      "required_tool_groups": ["wh", "rag"]
     },
     {
-      "id": "restock-check",
-      "template": "When will part {part_number} be restocked?",
-      "category": "policy",
-      "description": "Check inventory restock schedule; cross-reference blocking orders if stockout.",
-      "min_tool_calls": 2,
-      "required_tool_groups": ["ops"]
+      "id": "equipment-check",
+      "template": "Is equipment available in zone {zone} to complete replenishment?",
+      "category": "operations",
+      "description": "Equipment by zone, replen tasks, work order, equipment policy.",
+      "min_tool_calls": 4,
+      "required_tool_groups": ["wms", "wh", "rag"]
     },
     {
-      "id": "escalation-for-order",
-      "template": "Is there an open escalation for order {order_id}?",
-      "category": "support",
-      "description": "Search tickets by order and check escalation policy.",
-      "min_tool_calls": 2,
-      "required_tool_groups": ["mcp", "rag"]
+      "id": "cycle-count",
+      "template": "Explain the inventory issue at location {location_id}",
+      "category": "inventory",
+      "description": "Location, bin contents, incidents, work order.",
+      "min_tool_calls": 4,
+      "required_tool_groups": ["wh", "wms"]
     },
     {
-      "id": "part-delay-cause",
-      "template": "What caused delays for part {part_number}?",
-      "category": "parts_trace",
-      "description": "Analyze part timeline for qc_failed, rework, and delay_logged events.",
-      "min_tool_calls": 2,
-      "required_tool_groups": ["ops", "rag"]
+      "id": "cold-chain",
+      "template": "Are cold chain requirements met for pick order {pick_id}?",
+      "category": "outbound",
+      "description": "Pick order, SKU cold flag, lot temp check, cold chain SOP.",
+      "min_tool_calls": 4,
+      "required_tool_groups": ["wh", "rag"]
     },
     {
-      "id": "fulfillment-blocker",
-      "template": "What is blocking fulfillment of order {order_id}?",
-      "category": "support",
-      "description": "Determine whether hold status, inventory, or shipment delays block the order.",
-      "min_tool_calls": 2,
-      "required_tool_groups": ["ops", "rag"]
+      "id": "hazmat-pick",
+      "template": "Can pick order {pick_id} be picked safely on the current shift?",
+      "category": "operations",
+      "description": "Pick order, hazmat SKU, shift roster certs, hazmat SOP.",
+      "min_tool_calls": 4,
+      "required_tool_groups": ["wh", "wms", "rag"]
     }
   ]
 }

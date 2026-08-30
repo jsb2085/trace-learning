@@ -1,1168 +1,1425 @@
 {
-  "version": "0.2.0",
-  "description": "60 parameterized multi-tool eval instances (15 templates x 4 inputs each).",
+  "version": "0.3.0",
+  "description": "Warehouse agent eval \u2014 15 templates x 4 instances, 3-4 tool calls each.",
   "questions": [
     {
-      "id": "late-orders-001",
-      "template_id": "late-orders",
+      "id": "overdue-picks-001",
+      "template_id": "overdue-picks",
       "params": {
         "as_of_date": "2026-08-30"
       },
-      "category": "fulfillment",
-      "expected_answer": "ORD-2001",
+      "category": "outbound",
+      "expected_answer": "PK-5001",
       "expected_tool_calls": [
         {
           "tool": "rag_search",
           "args": {
-            "query": "late order"
+            "query": "overdue pick definition"
           }
         },
         {
-          "tool": "ops_find_late_orders",
+          "tool": "wh_get_warehouse_date",
+          "args": {}
+        },
+        {
+          "tool": "wh_find_overdue_picks",
+          "args": {
+            "as_of_date": "2026-08-30"
+          }
+        },
+        {
+          "tool": "wh_get_worker",
+          "args": {
+            "worker_id": "WK-001"
+          }
+        }
+      ],
+      "notes": "Also overdue: PK-5002, PK-5005, PK-5007",
+      "question": "Which pick orders are overdue as of 2026-08-30?",
+      "min_tool_calls": 4,
+      "difficulty": "medium"
+    },
+    {
+      "id": "overdue-picks-002",
+      "template_id": "overdue-picks",
+      "params": {
+        "as_of_date": "2026-08-29"
+      },
+      "category": "outbound",
+      "expected_answer": "PK-5005",
+      "expected_tool_calls": [
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "overdue pick"
+          }
+        },
+        {
+          "tool": "wh_get_warehouse_date",
+          "args": {}
+        },
+        {
+          "tool": "wh_find_overdue_picks",
+          "args": {
+            "as_of_date": "2026-08-29"
+          }
+        },
+        {
+          "tool": "wh_get_worker",
+          "args": {
+            "worker_id": "WK-003"
+          }
+        }
+      ],
+      "notes": "Also overdue: PK-5002",
+      "question": "Which pick orders are overdue as of 2026-08-29?",
+      "min_tool_calls": 4,
+      "difficulty": "medium"
+    },
+    {
+      "id": "overdue-picks-003",
+      "template_id": "overdue-picks",
+      "params": {
+        "as_of_date": "2026-08-28"
+      },
+      "category": "outbound",
+      "expected_answer": "PK-5005",
+      "expected_tool_calls": [
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "overdue pick SLA"
+          }
+        },
+        {
+          "tool": "wh_list_pick_orders",
+          "args": {
+            "status": "picking"
+          }
+        },
+        {
+          "tool": "wh_find_overdue_picks",
+          "args": {
+            "as_of_date": "2026-08-28"
+          }
+        },
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5005"
+          }
+        }
+      ],
+      "difficulty": "hard",
+      "question": "Which pick orders are overdue as of 2026-08-28?",
+      "min_tool_calls": 4,
+      "notes": ""
+    },
+    {
+      "id": "overdue-picks-004",
+      "template_id": "overdue-picks",
+      "params": {
+        "as_of_date": "2026-08-31"
+      },
+      "category": "outbound",
+      "expected_answer": "PK-5006",
+      "expected_tool_calls": [
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "overdue pick"
+          }
+        },
+        {
+          "tool": "wh_find_overdue_picks",
+          "args": {
+            "as_of_date": "2026-08-31"
+          }
+        },
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5006"
+          }
+        },
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5001"
+          }
+        }
+      ],
+      "notes": "PK-5006 on_hold also overdue; plus PK-5001/5002/5005/5007",
+      "difficulty": "hard",
+      "question": "Which pick orders are overdue as of 2026-08-31?",
+      "min_tool_calls": 4
+    },
+    {
+      "id": "sku-trace-001",
+      "template_id": "sku-trace",
+      "params": {
+        "sku": "SKU-GR-7782"
+      },
+      "category": "inventory",
+      "expected_answer": "qc_failed",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-GR-7782"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-GR-044"
+          }
+        },
+        {
+          "tool": "wh_find_picks_by_sku",
+          "args": {
+            "sku": "SKU-GR-7782"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "lot traceability"
+          }
+        }
+      ],
+      "question": "What happened to SKU SKU-GR-7782 in the warehouse?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "sku-trace-002",
+      "template_id": "sku-trace",
+      "params": {
+        "sku": "SKU-BKT-3309"
+      },
+      "category": "inventory",
+      "expected_answer": "damage_reported",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-BKT-3309"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-BK-210"
+          }
+        },
+        {
+          "tool": "wh_find_picks_by_sku",
+          "args": {
+            "sku": "SKU-BKT-3309"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "traceability SOP"
+          }
+        }
+      ],
+      "question": "What happened to SKU SKU-BKT-3309 in the warehouse?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "sku-trace-003",
+      "template_id": "sku-trace",
+      "params": {
+        "sku": "SKU-CTL-9901"
+      },
+      "category": "inventory",
+      "expected_answer": "firmware",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-CTL-9901"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-IC-009"
+          }
+        },
+        {
+          "tool": "wh_find_picks_by_sku",
+          "args": {
+            "sku": "SKU-CTL-9901"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "lot traceability"
+          }
+        }
+      ],
+      "question": "What happened to SKU SKU-CTL-9901 in the warehouse?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "sku-trace-004",
+      "template_id": "sku-trace",
+      "params": {
+        "sku": "SKU-COLD-110"
+      },
+      "category": "inventory",
+      "expected_answer": "temp_check_passed",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-COLD-110"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-CD-019"
+          }
+        },
+        {
+          "tool": "wh_find_picks_by_sku",
+          "args": {
+            "sku": "SKU-COLD-110"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "cold chain compliance"
+          }
+        }
+      ],
+      "question": "What happened to SKU SKU-COLD-110 in the warehouse?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "pick-delay-001",
+      "template_id": "pick-delay",
+      "params": {
+        "pick_id": "PK-5002"
+      },
+      "category": "outbound",
+      "expected_answer": "qc_failed",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5002"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-GR-044"
+          }
+        },
+        {
+          "tool": "wms_search_incidents",
+          "args": {
+            "query": "PK-5002"
+          }
+        },
+        {
+          "tool": "wh_get_worker_assignments",
+          "args": {
+            "worker_id": "WK-002"
+          }
+        }
+      ],
+      "question": "Why is pick order PK-5002 delayed?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "pick-delay-002",
+      "template_id": "pick-delay",
+      "params": {
+        "pick_id": "PK-5005"
+      },
+      "category": "outbound",
+      "expected_answer": "Missed transfer scan",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5005"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-BK-210"
+          }
+        },
+        {
+          "tool": "wms_search_incidents",
+          "args": {
+            "query": "PK-5005"
+          }
+        },
+        {
+          "tool": "wh_get_worker_assignments",
+          "args": {
+            "worker_id": "WK-003"
+          }
+        }
+      ],
+      "question": "Why is pick order PK-5005 delayed?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "pick-delay-003",
+      "template_id": "pick-delay",
+      "params": {
+        "pick_id": "PK-5007"
+      },
+      "category": "outbound",
+      "expected_answer": "hazmat",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5007"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-IC-009"
+          }
+        },
+        {
+          "tool": "wms_search_incidents",
+          "args": {
+            "query": "PK-5007"
+          }
+        },
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-CTL-9901"
+          }
+        }
+      ],
+      "question": "Why is pick order PK-5007 delayed?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "pick-delay-004",
+      "template_id": "pick-delay",
+      "params": {
+        "pick_id": "PK-5001"
+      },
+      "category": "outbound",
+      "expected_answer": "picking",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5001"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-HV-081"
+          }
+        },
+        {
+          "tool": "wms_search_incidents",
+          "args": {
+            "query": "PK-5001"
+          }
+        },
+        {
+          "tool": "wh_get_worker_assignments",
+          "args": {
+            "worker_id": "WK-001"
+          }
+        }
+      ],
+      "question": "Why is pick order PK-5001 delayed?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "bin-audit-001",
+      "template_id": "bin-audit",
+      "params": {
+        "location_id": "B-08-05"
+      },
+      "category": "inventory",
+      "expected_answer": "damaged",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_location",
+          "args": {
+            "location_id": "B-08-05"
+          }
+        },
+        {
+          "tool": "wh_get_bin_contents",
+          "args": {
+            "location_id": "B-08-05"
+          }
+        },
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-BKT-3309"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "damage hold policy"
+          }
+        }
+      ],
+      "question": "What's in bin B-08-05 and is any inventory on hold?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "bin-audit-002",
+      "template_id": "bin-audit",
+      "params": {
+        "location_id": "Q-03-01"
+      },
+      "category": "inventory",
+      "expected_answer": "qc_hold",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_location",
+          "args": {
+            "location_id": "Q-03-01"
+          }
+        },
+        {
+          "tool": "wh_get_bin_contents",
+          "args": {
+            "location_id": "Q-03-01"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-GR-043"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "hold policy"
+          }
+        }
+      ],
+      "question": "What's in bin Q-03-01 and is any inventory on hold?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "bin-audit-003",
+      "template_id": "bin-audit",
+      "params": {
+        "location_id": "A-04-01"
+      },
+      "category": "inventory",
+      "expected_answer": "allocated",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_location",
+          "args": {
+            "location_id": "A-04-01"
+          }
+        },
+        {
+          "tool": "wh_get_bin_contents",
+          "args": {
+            "location_id": "A-04-01"
+          }
+        },
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-FST-M8"
+          }
+        },
+        {
+          "tool": "wh_find_picks_by_sku",
+          "args": {
+            "sku": "SKU-FST-M8"
+          }
+        }
+      ],
+      "question": "What's in bin A-04-01 and is any inventory on hold?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "bin-audit-004",
+      "template_id": "bin-audit",
+      "params": {
+        "location_id": "C-02-01"
+      },
+      "category": "inventory",
+      "expected_answer": "available",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_location",
+          "args": {
+            "location_id": "C-02-01"
+          }
+        },
+        {
+          "tool": "wh_get_bin_contents",
+          "args": {
+            "location_id": "C-02-01"
+          }
+        },
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-GR-7782"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "cold chain"
+          }
+        }
+      ],
+      "question": "What's in bin C-02-01 and is any inventory on hold?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "replen-block-001",
+      "template_id": "replenishment-block",
+      "params": {
+        "zone": "PICK-FACE"
+      },
+      "category": "operations",
+      "expected_answer": "FL-02",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_replenishment_tasks",
+          "args": {
+            "zone": "PICK-FACE"
+          }
+        },
+        {
+          "tool": "wms_get_work_order",
+          "args": {
+            "work_order_id": "WO-7001"
+          }
+        },
+        {
+          "tool": "wms_list_equipment_by_zone",
+          "args": {
+            "zone": "PICK-FACE"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "replenishment SOP"
+          }
+        }
+      ],
+      "question": "What's blocking replenishment in zone PICK-FACE?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "replen-block-002",
+      "template_id": "replenishment-block",
+      "params": {
+        "zone": "BULK-A"
+      },
+      "category": "operations",
+      "expected_answer": "RPL-1002",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_replenishment_tasks",
+          "args": {
+            "zone": "BULK-A"
+          }
+        },
+        {
+          "tool": "wms_list_equipment_by_zone",
+          "args": {
+            "zone": "BULK-A"
+          }
+        },
+        {
+          "tool": "wh_search_locations",
+          "args": {
+            "aisle": "B"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "replenishment"
+          }
+        }
+      ],
+      "question": "What's blocking replenishment in zone BULK-A?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "replen-block-003",
+      "template_id": "replenishment-block",
+      "params": {
+        "zone": "COLD"
+      },
+      "category": "operations",
+      "expected_answer": "RPL-1003",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_replenishment_tasks",
+          "args": {
+            "zone": "COLD"
+          }
+        },
+        {
+          "tool": "wms_get_work_order",
+          "args": {
+            "work_order_id": "WO-7003"
+          }
+        },
+        {
+          "tool": "wms_list_equipment_by_zone",
+          "args": {
+            "zone": "COLD"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "replenishment SOP"
+          }
+        }
+      ],
+      "question": "What's blocking replenishment in zone COLD?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "replen-block-004",
+      "template_id": "replenishment-block",
+      "params": {
+        "zone": "PICK-FACE"
+      },
+      "category": "operations",
+      "expected_answer": "equipment_unavailable",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_replenishment_tasks",
+          "args": {
+            "zone": "PICK-FACE"
+          }
+        },
+        {
+          "tool": "wms_search_incidents",
+          "args": {
+            "query": "FL-02"
+          }
+        },
+        {
+          "tool": "wms_get_equipment",
+          "args": {
+            "equipment_id": "FL-02"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "equipment assignment"
+          }
+        }
+      ],
+      "difficulty": "hard",
+      "question": "What's blocking replenishment in zone PICK-FACE?",
+      "min_tool_calls": 4,
+      "notes": ""
+    },
+    {
+      "id": "worker-load-001",
+      "template_id": "worker-load",
+      "params": {
+        "worker_id": "WK-001"
+      },
+      "category": "operations",
+      "expected_answer": "PK-5001",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_worker",
+          "args": {
+            "worker_id": "WK-001"
+          }
+        },
+        {
+          "tool": "wh_get_worker_assignments",
+          "args": {
+            "worker_id": "WK-001"
+          }
+        },
+        {
+          "tool": "wh_get_warehouse_date",
+          "args": {}
+        },
+        {
+          "tool": "wh_find_overdue_picks",
           "args": {
             "as_of_date": "2026-08-30"
           }
         }
       ],
+      "question": "What picks is worker WK-001 responsible for and are any overdue?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "notes": "Also late: ORD-2002, ORD-2005, ORD-2008",
-      "question": "What orders are late as of 2026-08-30?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "late-orders-002",
-      "template_id": "late-orders",
+      "id": "worker-load-002",
+      "template_id": "worker-load",
       "params": {
-        "as_of_date": "2026-08-29"
+        "worker_id": "WK-002"
       },
-      "category": "fulfillment",
-      "expected_answer": "ORD-2008",
+      "category": "operations",
+      "expected_answer": "PK-5002",
       "expected_tool_calls": [
         {
-          "tool": "rag_search",
+          "tool": "wh_get_worker",
           "args": {
-            "query": "late order definition"
+            "worker_id": "WK-002"
           }
         },
         {
-          "tool": "ops_find_late_orders",
+          "tool": "wh_get_worker_assignments",
           "args": {
-            "as_of_date": "2026-08-29"
+            "worker_id": "WK-002"
+          }
+        },
+        {
+          "tool": "wh_get_warehouse_date",
+          "args": {}
+        },
+        {
+          "tool": "wh_find_overdue_picks",
+          "args": {
+            "as_of_date": "2026-08-30"
           }
         }
       ],
+      "question": "What picks is worker WK-002 responsible for and are any overdue?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "notes": "Also late: ORD-2001, ORD-2005",
-      "question": "What orders are late as of 2026-08-29?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "late-orders-003",
-      "template_id": "late-orders",
+      "id": "worker-load-003",
+      "template_id": "worker-load",
       "params": {
-        "as_of_date": "2026-08-28"
+        "worker_id": "WK-003"
       },
-      "category": "fulfillment",
-      "expected_answer": "ORD-2008",
+      "category": "operations",
+      "expected_answer": "PK-5005",
       "expected_tool_calls": [
         {
-          "tool": "rag_search",
+          "tool": "wh_get_worker",
           "args": {
-            "query": "late order"
+            "worker_id": "WK-003"
           }
         },
         {
-          "tool": "ops_find_late_orders",
+          "tool": "wh_get_worker_assignments",
           "args": {
-            "as_of_date": "2026-08-28"
-          }
-        }
-      ],
-      "difficulty": "hard",
-      "notes": "Also late: ORD-2005 only",
-      "question": "What orders are late as of 2026-08-28?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "late-orders-004",
-      "template_id": "late-orders",
-      "params": {
-        "as_of_date": "2026-09-01"
-      },
-      "category": "fulfillment",
-      "expected_answer": "ORD-2007",
-      "expected_tool_calls": [
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "late order"
+            "worker_id": "WK-003"
           }
         },
         {
-          "tool": "ops_find_late_orders",
-          "args": {
-            "as_of_date": "2026-09-01"
-          }
-        }
-      ],
-      "difficulty": "hard",
-      "notes": "ORD-2007 on_hold also late; plus ORD-2001/2002/2005/2008",
-      "question": "What orders are late as of 2026-09-01?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "part-history-001",
-      "template_id": "part-history",
-      "params": {
-        "part_number": "PN-7782"
-      },
-      "category": "parts_trace",
-      "expected_answer": "qc_failed",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_part_history",
-          "args": {
-            "part_number": "PN-7782"
-          }
+          "tool": "wh_get_warehouse_date",
+          "args": {}
         },
         {
-          "tool": "ops_find_orders_by_part",
+          "tool": "days_between",
           "args": {
-            "part_number": "PN-7782"
+            "start_date": "2026-08-27",
+            "end_date": "2026-08-30"
           }
         }
       ],
+      "question": "What picks is worker WK-003 responsible for and are any overdue?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "What happened to part PN-7782?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "part-history-002",
-      "template_id": "part-history",
+      "id": "worker-load-004",
+      "template_id": "worker-load",
       "params": {
-        "part_number": "PN-9901"
+        "worker_id": "WK-004"
       },
-      "category": "parts_trace",
-      "expected_answer": "customs hold",
+      "category": "operations",
+      "expected_answer": "none",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_part_history",
+          "tool": "wh_get_worker",
           "args": {
-            "part_number": "PN-9901"
+            "worker_id": "WK-004"
           }
         },
         {
-          "tool": "ops_find_orders_by_part",
+          "tool": "wh_get_worker_assignments",
           "args": {
-            "part_number": "PN-9901"
+            "worker_id": "WK-004"
+          }
+        },
+        {
+          "tool": "wms_get_work_order",
+          "args": {
+            "work_order_id": "WO-7001"
+          }
+        },
+        {
+          "tool": "wh_get_replenishment_tasks",
+          "args": {
+            "zone": "PICK-FACE"
           }
         }
       ],
+      "question": "What picks is worker WK-004 responsible for and are any overdue?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "What happened to part PN-9901?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "part-history-003",
-      "template_id": "part-history",
+      "id": "inbound-001",
+      "template_id": "inbound-putaway",
       "params": {
-        "part_number": "PN-4421"
+        "inbound_id": "INB-3004"
       },
-      "category": "parts_trace",
-      "expected_answer": "qc_passed",
+      "category": "inbound",
+      "expected_answer": "receiving",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_part_history",
+          "tool": "wh_get_inbound",
           "args": {
-            "part_number": "PN-4421"
+            "inbound_id": "INB-3004"
           }
         },
         {
-          "tool": "ops_find_orders_by_part",
+          "tool": "wh_get_sku",
           "args": {
-            "part_number": "PN-4421"
-          }
-        }
-      ],
-      "difficulty": "easy",
-      "question": "What happened to part PN-4421?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "part-history-004",
-      "template_id": "part-history",
-      "params": {
-        "part_number": "PN-3309"
-      },
-      "category": "parts_trace",
-      "expected_answer": "Missed transfer scan",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_part_history",
-          "args": {
-            "part_number": "PN-3309"
+            "sku": "SKU-FST-M8"
           }
         },
         {
-          "tool": "ops_find_orders_by_part",
+          "tool": "wh_get_location",
           "args": {
-            "part_number": "PN-3309"
+            "location_id": "R-01-01"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "putaway rules"
           }
         }
       ],
+      "question": "What's the status of inbound INB-3004 and where should it be put away?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "What happened to part PN-3309?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "order-delay-001",
-      "template_id": "order-delay-reason",
+      "id": "inbound-002",
+      "template_id": "inbound-putaway",
       "params": {
-        "order_id": "ORD-2002"
+        "inbound_id": "INB-3003"
       },
-      "category": "fulfillment",
-      "expected_answer": "Weather delay",
+      "category": "inbound",
+      "expected_answer": "COLD",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_order",
+          "tool": "wh_get_inbound",
           "args": {
-            "order_id": "ORD-2002"
+            "inbound_id": "INB-3003"
           }
         },
         {
-          "tool": "ops_get_shipment",
+          "tool": "wh_get_sku",
           "args": {
-            "order_id": "ORD-2002"
+            "sku": "SKU-COLD-110"
           }
         },
         {
-          "tool": "ops_get_part_history",
+          "tool": "wh_get_lot_trace",
           "args": {
-            "part_number": "PN-7782"
+            "lot_id": "LOT-CD-019"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "putaway cold"
           }
         }
       ],
-      "difficulty": "hard",
-      "question": "Why is order ORD-2002 delayed?",
-      "min_tool_calls": 3
-    },
-    {
-      "id": "order-delay-002",
-      "template_id": "order-delay-reason",
-      "params": {
-        "order_id": "ORD-2008"
-      },
-      "category": "fulfillment",
-      "expected_answer": "Customs hold",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2008"
-          }
-        },
-        {
-          "tool": "ops_get_shipment",
-          "args": {
-            "order_id": "ORD-2008"
-          }
-        },
-        {
-          "tool": "ops_get_part_history",
-          "args": {
-            "part_number": "PN-9901"
-          }
-        }
-      ],
-      "difficulty": "hard",
-      "question": "Why is order ORD-2008 delayed?",
-      "min_tool_calls": 3
-    },
-    {
-      "id": "order-delay-003",
-      "template_id": "order-delay-reason",
-      "params": {
-        "order_id": "ORD-2005"
-      },
-      "category": "fulfillment",
-      "expected_answer": "Missed transfer scan",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2005"
-          }
-        },
-        {
-          "tool": "ops_get_shipment",
-          "args": {
-            "order_id": "ORD-2005"
-          }
-        },
-        {
-          "tool": "ops_get_part_history",
-          "args": {
-            "part_number": "PN-3309"
-          }
-        }
-      ],
-      "difficulty": "hard",
-      "question": "Why is order ORD-2005 delayed?",
-      "min_tool_calls": 3
-    },
-    {
-      "id": "order-delay-004",
-      "template_id": "order-delay-reason",
-      "params": {
-        "order_id": "ORD-2001"
-      },
-      "category": "fulfillment",
-      "expected_answer": "in_transit",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2001"
-          }
-        },
-        {
-          "tool": "ops_get_shipment",
-          "args": {
-            "order_id": "ORD-2001"
-          }
-        },
-        {
-          "tool": "ops_get_part_history",
-          "args": {
-            "part_number": "PN-4421"
-          }
-        }
-      ],
+      "question": "What's the status of inbound INB-3003 and where should it be put away?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "Why is order ORD-2001 delayed?",
-      "min_tool_calls": 3
+      "notes": ""
     },
     {
-      "id": "refund-001",
-      "template_id": "refund-eligibility",
+      "id": "inbound-003",
+      "template_id": "inbound-putaway",
       "params": {
-        "order_id": "ORD-2003"
+        "inbound_id": "INB-3001"
       },
-      "category": "policy",
-      "expected_answer": "eligible",
+      "category": "inbound",
+      "expected_answer": "putaway_complete",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_order",
+          "tool": "wh_get_inbound",
           "args": {
-            "order_id": "ORD-2003"
+            "inbound_id": "INB-3001"
+          }
+        },
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-GR-7782"
+          }
+        },
+        {
+          "tool": "wh_get_sku_locations",
+          "args": {
+            "sku": "SKU-GR-7782"
           }
         },
         {
           "tool": "rag_search",
           "args": {
-            "query": "refund policy"
+            "query": "putaway rules"
           }
         }
       ],
+      "question": "What's the status of inbound INB-3001 and where should it be put away?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "Is order ORD-2003 eligible for a full refund?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "refund-002",
-      "template_id": "refund-eligibility",
+      "id": "inbound-004",
+      "template_id": "inbound-putaway",
       "params": {
-        "order_id": "ORD-2004"
+        "inbound_id": "INB-3002"
       },
-      "category": "policy",
-      "expected_answer": "delivered",
+      "category": "inbound",
+      "expected_answer": "PICK-FACE",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_order",
+          "tool": "wh_get_inbound",
           "args": {
-            "order_id": "ORD-2004"
+            "inbound_id": "INB-3002"
+          }
+        },
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-HVA-4421"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-HV-081"
           }
         },
         {
           "tool": "rag_search",
           "args": {
-            "query": "refund policy"
+            "query": "putaway"
           }
         }
       ],
+      "question": "What's the status of inbound INB-3002 and where should it be put away?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "Is order ORD-2004 eligible for a full refund?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "refund-003",
-      "template_id": "refund-eligibility",
+      "id": "pick-cold-001",
+      "template_id": "pick-route-cold",
       "params": {
-        "order_id": "ORD-2001"
+        "pick_id": "PK-5002"
       },
-      "category": "policy",
-      "expected_answer": "late",
+      "category": "outbound",
+      "expected_answer": "yes",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_order",
+          "tool": "wh_get_pick_order",
           "args": {
-            "order_id": "ORD-2001"
+            "pick_id": "PK-5002"
+          }
+        },
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-COLD-110"
+          }
+        },
+        {
+          "tool": "wh_get_sku_locations",
+          "args": {
+            "sku": "SKU-GR-7782"
           }
         },
         {
           "tool": "rag_search",
           "args": {
-            "query": "refund policy late delivery"
+            "query": "zone routing cold"
           }
         }
       ],
-      "difficulty": "hard",
-      "question": "Is order ORD-2001 eligible for a full refund?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "refund-004",
-      "template_id": "refund-eligibility",
-      "params": {
-        "order_id": "ORD-2006"
-      },
-      "category": "policy",
-      "expected_answer": "eligible",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2006"
-          }
-        },
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "refund policy"
-          }
-        }
-      ],
-      "difficulty": "easy",
-      "question": "Is order ORD-2006 eligible for a full refund?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "shipment-eta-001",
-      "template_id": "shipment-eta",
-      "params": {
-        "order_id": "ORD-2001"
-      },
-      "category": "fulfillment",
-      "expected_answer": "2026-08-31",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2001"
-          }
-        },
-        {
-          "tool": "ops_get_shipment",
-          "args": {
-            "order_id": "ORD-2001"
-          }
-        },
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "shipping SLA"
-          }
-        }
-      ],
+      "question": "Does pick order PK-5002 require entering the cold zone?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "When will order ORD-2001 arrive?",
-      "min_tool_calls": 3
+      "notes": ""
     },
     {
-      "id": "shipment-eta-002",
-      "template_id": "shipment-eta",
+      "id": "pick-cold-002",
+      "template_id": "pick-route-cold",
       "params": {
-        "order_id": "ORD-2002"
+        "pick_id": "PK-5001"
       },
-      "category": "fulfillment",
-      "expected_answer": "2026-08-30",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2002"
-          }
-        },
-        {
-          "tool": "ops_get_shipment",
-          "args": {
-            "order_id": "ORD-2002"
-          }
-        },
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "express shipping"
-          }
-        }
-      ],
-      "difficulty": "medium",
-      "question": "When will order ORD-2002 arrive?",
-      "min_tool_calls": 3
-    },
-    {
-      "id": "shipment-eta-003",
-      "template_id": "shipment-eta",
-      "params": {
-        "order_id": "ORD-2005"
-      },
-      "category": "fulfillment",
-      "expected_answer": "2026-09-01",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2005"
-          }
-        },
-        {
-          "tool": "ops_get_shipment",
-          "args": {
-            "order_id": "ORD-2005"
-          }
-        },
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "shipping SLA"
-          }
-        }
-      ],
-      "difficulty": "medium",
-      "question": "When will order ORD-2005 arrive?",
-      "min_tool_calls": 3
-    },
-    {
-      "id": "shipment-eta-004",
-      "template_id": "shipment-eta",
-      "params": {
-        "order_id": "ORD-2008"
-      },
-      "category": "fulfillment",
-      "expected_answer": "2026-08-29",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2008"
-          }
-        },
-        {
-          "tool": "ops_get_shipment",
-          "args": {
-            "order_id": "ORD-2008"
-          }
-        },
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "shipping SLA"
-          }
-        }
-      ],
-      "difficulty": "hard",
-      "question": "When will order ORD-2008 arrive?",
-      "min_tool_calls": 3
-    },
-    {
-      "id": "qc-order-001",
-      "template_id": "qc-on-order",
-      "params": {
-        "order_id": "ORD-2002"
-      },
-      "category": "parts_trace",
-      "expected_answer": "PN-7782",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2002"
-          }
-        },
-        {
-          "tool": "ops_get_part_history",
-          "args": {
-            "part_number": "PN-7782"
-          }
-        },
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "QC failure"
-          }
-        }
-      ],
-      "difficulty": "hard",
-      "question": "Did any parts on order ORD-2002 fail QC?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "qc-order-002",
-      "template_id": "qc-on-order",
-      "params": {
-        "order_id": "ORD-2008"
-      },
-      "category": "parts_trace",
-      "expected_answer": "PN-9901",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2008"
-          }
-        },
-        {
-          "tool": "ops_get_part_history",
-          "args": {
-            "part_number": "PN-9901"
-          }
-        },
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "QC failure"
-          }
-        }
-      ],
-      "difficulty": "hard",
-      "question": "Did any parts on order ORD-2008 fail QC?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "qc-order-003",
-      "template_id": "qc-on-order",
-      "params": {
-        "order_id": "ORD-2005"
-      },
-      "category": "parts_trace",
-      "expected_answer": "PN-7782",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2005"
-          }
-        },
-        {
-          "tool": "ops_get_part_history",
-          "args": {
-            "part_number": "PN-7782"
-          }
-        },
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "QC failure"
-          }
-        }
-      ],
-      "difficulty": "medium",
-      "question": "Did any parts on order ORD-2005 fail QC?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "qc-order-004",
-      "template_id": "qc-on-order",
-      "params": {
-        "order_id": "ORD-2004"
-      },
-      "category": "parts_trace",
+      "category": "outbound",
       "expected_answer": "no",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_order",
+          "tool": "wh_get_pick_order",
           "args": {
-            "order_id": "ORD-2004"
+            "pick_id": "PK-5001"
           }
         },
         {
-          "tool": "ops_get_part_history",
+          "tool": "wh_get_sku",
           "args": {
-            "part_number": "PN-4421"
+            "sku": "SKU-HVA-4421"
           }
         },
         {
-          "tool": "rag_search",
+          "tool": "wh_get_sku_locations",
           "args": {
-            "query": "QC failure"
-          }
-        }
-      ],
-      "difficulty": "medium",
-      "question": "Did any parts on order ORD-2004 fail QC?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "inventory-001",
-      "template_id": "inventory-fulfillment",
-      "params": {
-        "order_id": "ORD-2003"
-      },
-      "category": "policy",
-      "expected_answer": "cannot",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2003"
-          }
-        },
-        {
-          "tool": "ops_get_inventory",
-          "args": {
-            "part_number": "PN-1100"
+            "sku": "SKU-FST-M8"
           }
         },
         {
           "tool": "rag_search",
           "args": {
-            "query": "inventory allocation"
+            "query": "zone routing"
           }
         }
       ],
-      "difficulty": "hard",
-      "question": "Can order ORD-2003 be fulfilled from current inventory?",
-      "min_tool_calls": 2
+      "question": "Does pick order PK-5001 require entering the cold zone?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
     },
     {
-      "id": "inventory-002",
-      "template_id": "inventory-fulfillment",
+      "id": "pick-cold-003",
+      "template_id": "pick-route-cold",
       "params": {
-        "order_id": "ORD-2006"
+        "pick_id": "PK-5005"
       },
-      "category": "policy",
-      "expected_answer": "cannot",
+      "category": "outbound",
+      "expected_answer": "yes",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_order",
+          "tool": "wh_get_pick_order",
           "args": {
-            "order_id": "ORD-2006"
+            "pick_id": "PK-5005"
           }
         },
         {
-          "tool": "ops_get_inventory",
+          "tool": "wh_get_sku",
           "args": {
-            "part_number": "PN-1100"
+            "sku": "SKU-GR-7782"
+          }
+        },
+        {
+          "tool": "wh_get_sku_locations",
+          "args": {
+            "sku": "SKU-GR-7782"
           }
         },
         {
           "tool": "rag_search",
           "args": {
-            "query": "inventory allocation"
+            "query": "cold zone"
           }
         }
       ],
-      "difficulty": "hard",
-      "question": "Can order ORD-2006 be fulfilled from current inventory?",
-      "min_tool_calls": 2
+      "question": "Does pick order PK-5005 require entering the cold zone?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
     },
     {
-      "id": "inventory-003",
-      "template_id": "inventory-fulfillment",
+      "id": "pick-cold-004",
+      "template_id": "pick-route-cold",
       "params": {
-        "order_id": "ORD-2001"
+        "pick_id": "PK-5007"
       },
-      "category": "policy",
-      "expected_answer": "can",
+      "category": "outbound",
+      "expected_answer": "no",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_order",
+          "tool": "wh_get_pick_order",
           "args": {
-            "order_id": "ORD-2001"
+            "pick_id": "PK-5007"
           }
         },
         {
-          "tool": "ops_get_inventory",
+          "tool": "wh_get_sku",
           "args": {
-            "part_number": "PN-4421"
+            "sku": "SKU-CTL-9901"
+          }
+        },
+        {
+          "tool": "wh_get_sku_locations",
+          "args": {
+            "sku": "SKU-CTL-9901"
           }
         },
         {
           "tool": "rag_search",
           "args": {
-            "query": "inventory allocation"
+            "query": "zone routing"
           }
         }
       ],
+      "question": "Does pick order PK-5007 require entering the cold zone?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "Can order ORD-2001 be fulfilled from current inventory?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "inventory-004",
-      "template_id": "inventory-fulfillment",
+      "id": "damage-001",
+      "template_id": "damage-impact",
       "params": {
-        "order_id": "ORD-2007"
+        "pick_id": "PK-5005"
       },
-      "category": "policy",
-      "expected_answer": "can",
+      "category": "inventory",
+      "expected_answer": "damage",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_order",
+          "tool": "wh_get_pick_order",
           "args": {
-            "order_id": "ORD-2007"
+            "pick_id": "PK-5005"
           }
         },
         {
-          "tool": "ops_get_inventory",
+          "tool": "wms_search_incidents",
           "args": {
-            "part_number": "PN-3309"
+            "query": "B-08-05"
           }
         },
         {
-          "tool": "rag_search",
+          "tool": "wh_get_bin_contents",
           "args": {
-            "query": "inventory allocation"
+            "location_id": "B-08-05"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-BK-210"
           }
         }
       ],
+      "question": "Is damaged inventory affecting pick order PK-5005?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "Can order ORD-2007 be fulfilled from current inventory?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "ticket-owner-001",
-      "template_id": "ticket-owner",
+      "id": "damage-002",
+      "template_id": "damage-impact",
       "params": {
-        "ticket_id": "TKT-5001"
+        "pick_id": "PK-5006"
       },
-      "category": "support",
-      "expected_answer": "Carol Wu",
+      "category": "inventory",
+      "expected_answer": "no",
       "expected_tool_calls": [
         {
-          "tool": "mcp_get_ticket",
+          "tool": "wh_get_pick_order",
           "args": {
-            "ticket_id": "TKT-5001"
+            "pick_id": "PK-5006"
           }
         },
         {
-          "tool": "mcp_get_user",
+          "tool": "wms_search_incidents",
           "args": {
-            "user_id": "u-003"
-          }
-        }
-      ],
-      "difficulty": "easy",
-      "question": "Who owns ticket TKT-5001 and what is it about?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "ticket-owner-002",
-      "template_id": "ticket-owner",
-      "params": {
-        "ticket_id": "TKT-5002"
-      },
-      "category": "support",
-      "expected_answer": "Alice Chen",
-      "expected_tool_calls": [
-        {
-          "tool": "mcp_get_ticket",
-          "args": {
-            "ticket_id": "TKT-5002"
+            "query": "PK-5006"
           }
         },
         {
-          "tool": "mcp_get_user",
+          "tool": "wh_get_bin_contents",
           "args": {
-            "user_id": "u-001"
-          }
-        }
-      ],
-      "difficulty": "easy",
-      "question": "Who owns ticket TKT-5002 and what is it about?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "ticket-owner-003",
-      "template_id": "ticket-owner",
-      "params": {
-        "ticket_id": "TKT-5004"
-      },
-      "category": "support",
-      "expected_answer": "Alice Chen",
-      "expected_tool_calls": [
-        {
-          "tool": "mcp_get_ticket",
-          "args": {
-            "ticket_id": "TKT-5004"
+            "location_id": "B-08-04"
           }
         },
         {
-          "tool": "mcp_get_user",
+          "tool": "wh_get_sku",
           "args": {
-            "user_id": "u-001"
+            "sku": "SKU-BKT-3309"
           }
         }
       ],
-      "difficulty": "easy",
-      "question": "Who owns ticket TKT-5004 and what is it about?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "ticket-owner-004",
-      "template_id": "ticket-owner",
-      "params": {
-        "ticket_id": "TKT-5005"
-      },
-      "category": "support",
-      "expected_answer": "Carol Wu",
-      "expected_tool_calls": [
-        {
-          "tool": "mcp_get_ticket",
-          "args": {
-            "ticket_id": "TKT-5005"
-          }
-        },
-        {
-          "tool": "mcp_get_user",
-          "args": {
-            "user_id": "u-003"
-          }
-        }
-      ],
-      "difficulty": "easy",
-      "question": "Who owns ticket TKT-5005 and what is it about?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "customer-orders-001",
-      "template_id": "customer-open-orders",
-      "params": {
-        "customer_id": "C-100"
-      },
-      "category": "fulfillment",
-      "expected_answer": "ORD-2003",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_query_orders",
-          "args": {
-            "customer_id": "C-100"
-          }
-        },
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2001"
-          }
-        }
-      ],
+      "question": "Is damaged inventory affecting pick order PK-5006?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "notes": "C-100 also has ORD-2001 in_transit",
-      "question": "What non-delivered orders does customer C-100 have?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "customer-orders-002",
-      "template_id": "customer-open-orders",
+      "id": "damage-003",
+      "template_id": "damage-impact",
       "params": {
-        "customer_id": "C-101"
+        "pick_id": "PK-5002"
       },
-      "category": "fulfillment",
-      "expected_answer": "ORD-2006",
+      "category": "inventory",
+      "expected_answer": "no",
       "expected_tool_calls": [
         {
-          "tool": "ops_query_orders",
+          "tool": "wh_get_pick_order",
           "args": {
-            "customer_id": "C-101"
+            "pick_id": "PK-5002"
           }
         },
         {
-          "tool": "ops_get_order",
+          "tool": "wms_search_incidents",
           "args": {
-            "order_id": "ORD-2002"
+            "query": "PK-5002"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-GR-044"
+          }
+        },
+        {
+          "tool": "wh_get_location",
+          "args": {
+            "location_id": "C-02-01"
           }
         }
       ],
+      "question": "Is damaged inventory affecting pick order PK-5002?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "What non-delivered orders does customer C-101 have?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "customer-orders-003",
-      "template_id": "customer-open-orders",
+      "id": "damage-004",
+      "template_id": "damage-impact",
       "params": {
-        "customer_id": "C-103"
+        "pick_id": "PK-5001"
       },
-      "category": "fulfillment",
-      "expected_answer": "ORD-2005",
+      "category": "inventory",
+      "expected_answer": "no",
       "expected_tool_calls": [
         {
-          "tool": "ops_query_orders",
+          "tool": "wh_get_pick_order",
           "args": {
-            "customer_id": "C-103"
+            "pick_id": "PK-5001"
           }
         },
         {
-          "tool": "ops_get_shipment",
+          "tool": "wms_search_incidents",
           "args": {
-            "order_id": "ORD-2005"
+            "query": "PK-5001"
+          }
+        },
+        {
+          "tool": "wh_get_bin_contents",
+          "args": {
+            "location_id": "A-12-03"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-HV-081"
           }
         }
       ],
+      "question": "Is damaged inventory affecting pick order PK-5001?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "What non-delivered orders does customer C-103 have?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "customer-orders-004",
-      "template_id": "customer-open-orders",
+      "id": "ship-risk-001",
+      "template_id": "ship-by-risk",
       "params": {
-        "customer_id": "C-105"
+        "pick_id": "PK-5002"
       },
-      "category": "fulfillment",
-      "expected_answer": "ORD-2008",
+      "category": "outbound",
+      "expected_answer": "yes",
       "expected_tool_calls": [
         {
-          "tool": "ops_query_orders",
+          "tool": "wh_get_pick_order",
           "args": {
-            "customer_id": "C-105"
+            "pick_id": "PK-5002"
           }
         },
         {
-          "tool": "ops_get_shipment",
-          "args": {
-            "order_id": "ORD-2008"
-          }
-        }
-      ],
-      "difficulty": "easy",
-      "question": "What non-delivered orders does customer C-105 have?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "orders-part-001",
-      "template_id": "orders-with-part",
-      "params": {
-        "part_number": "PN-7782"
-      },
-      "category": "parts_trace",
-      "expected_answer": "ORD-2002",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_find_orders_by_part",
-          "args": {
-            "part_number": "PN-7782"
-          }
+          "tool": "wh_get_warehouse_date",
+          "args": {}
         },
         {
-          "tool": "ops_get_order",
+          "tool": "wms_search_incidents",
           "args": {
-            "order_id": "ORD-2002"
-          }
-        }
-      ],
-      "difficulty": "medium",
-      "question": "Which orders include part PN-7782 and what are their statuses?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "orders-part-002",
-      "template_id": "orders-with-part",
-      "params": {
-        "part_number": "PN-4421"
-      },
-      "category": "parts_trace",
-      "expected_answer": "ORD-2001",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_find_orders_by_part",
-          "args": {
-            "part_number": "PN-4421"
-          }
-        },
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2001"
-          }
-        }
-      ],
-      "difficulty": "easy",
-      "question": "Which orders include part PN-4421 and what are their statuses?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "orders-part-003",
-      "template_id": "orders-with-part",
-      "params": {
-        "part_number": "PN-1100"
-      },
-      "category": "parts_trace",
-      "expected_answer": "ORD-2003",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_find_orders_by_part",
-          "args": {
-            "part_number": "PN-1100"
-          }
-        },
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2006"
-          }
-        }
-      ],
-      "difficulty": "medium",
-      "question": "Which orders include part PN-1100 and what are their statuses?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "orders-part-004",
-      "template_id": "orders-with-part",
-      "params": {
-        "part_number": "PN-3309"
-      },
-      "category": "parts_trace",
-      "expected_answer": "ORD-2005",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_find_orders_by_part",
-          "args": {
-            "part_number": "PN-3309"
-          }
-        },
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2007"
-          }
-        }
-      ],
-      "difficulty": "medium",
-      "question": "Which orders include part PN-3309 and what are their statuses?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "days-late-001",
-      "template_id": "days-late",
-      "params": {
-        "order_id": "ORD-2001",
-        "as_of_date": "2026-08-30"
-      },
-      "category": "fulfillment",
-      "expected_answer": "2",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2001"
-          }
-        },
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "late order"
+            "query": "PK-5002"
           }
         },
         {
@@ -1173,30 +1430,72 @@
           }
         }
       ],
-      "difficulty": "hard",
-      "question": "How many days late is order ORD-2001 as of 2026-08-30?",
-      "min_tool_calls": 3
+      "question": "Will pick order PK-5002 miss its ship-by date?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
     },
     {
-      "id": "days-late-002",
-      "template_id": "days-late",
+      "id": "ship-risk-002",
+      "template_id": "ship-by-risk",
       "params": {
-        "order_id": "ORD-2005",
-        "as_of_date": "2026-08-30"
+        "pick_id": "PK-5003"
       },
-      "category": "fulfillment",
-      "expected_answer": "3",
+      "category": "outbound",
+      "expected_answer": "no",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_order",
+          "tool": "wh_get_pick_order",
           "args": {
-            "order_id": "ORD-2005"
+            "pick_id": "PK-5003"
           }
         },
         {
-          "tool": "rag_search",
+          "tool": "wh_get_warehouse_date",
+          "args": {}
+        },
+        {
+          "tool": "wh_get_sku",
           "args": {
-            "query": "late order"
+            "sku": "SKU-BKT-3309"
+          }
+        },
+        {
+          "tool": "days_between",
+          "args": {
+            "start_date": "2026-08-30",
+            "end_date": "2026-09-02"
+          }
+        }
+      ],
+      "question": "Will pick order PK-5003 miss its ship-by date?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "ship-risk-003",
+      "template_id": "ship-by-risk",
+      "params": {
+        "pick_id": "PK-5005"
+      },
+      "category": "outbound",
+      "expected_answer": "yes",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5005"
+          }
+        },
+        {
+          "tool": "wh_get_warehouse_date",
+          "args": {}
+        },
+        {
+          "tool": "wms_search_incidents",
+          "args": {
+            "query": "PK-5005"
           }
         },
         {
@@ -1207,511 +1506,827 @@
           }
         }
       ],
-      "difficulty": "hard",
-      "question": "How many days late is order ORD-2005 as of 2026-08-30?",
-      "min_tool_calls": 3
-    },
-    {
-      "id": "days-late-003",
-      "template_id": "days-late",
-      "params": {
-        "order_id": "ORD-2008",
-        "as_of_date": "2026-08-30"
-      },
-      "category": "fulfillment",
-      "expected_answer": "4",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2008"
-          }
-        },
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "late order"
-          }
-        },
-        {
-          "tool": "days_between",
-          "args": {
-            "start_date": "2026-08-26",
-            "end_date": "2026-08-30"
-          }
-        }
-      ],
-      "difficulty": "hard",
-      "question": "How many days late is order ORD-2008 as of 2026-08-30?",
-      "min_tool_calls": 3
-    },
-    {
-      "id": "days-late-004",
-      "template_id": "days-late",
-      "params": {
-        "order_id": "ORD-2002",
-        "as_of_date": "2026-08-30"
-      },
-      "category": "fulfillment",
-      "expected_answer": "1",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2002"
-          }
-        },
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "late order"
-          }
-        },
-        {
-          "tool": "days_between",
-          "args": {
-            "start_date": "2026-08-29",
-            "end_date": "2026-08-30"
-          }
-        }
-      ],
+      "question": "Will pick order PK-5005 miss its ship-by date?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "How many days late is order ORD-2002 as of 2026-08-30?",
-      "min_tool_calls": 3
+      "notes": ""
     },
     {
-      "id": "restock-001",
-      "template_id": "restock-check",
+      "id": "ship-risk-004",
+      "template_id": "ship-by-risk",
       "params": {
-        "part_number": "PN-1100"
+        "pick_id": "PK-5008"
       },
-      "category": "policy",
-      "expected_answer": "2026-09-01",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_inventory",
-          "args": {
-            "part_number": "PN-1100"
-          }
-        },
-        {
-          "tool": "ops_find_orders_by_part",
-          "args": {
-            "part_number": "PN-1100"
-          }
-        }
-      ],
-      "difficulty": "medium",
-      "question": "When will part PN-1100 be restocked?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "restock-002",
-      "template_id": "restock-check",
-      "params": {
-        "part_number": "PN-7782"
-      },
-      "category": "policy",
-      "expected_answer": "2026-09-05",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_inventory",
-          "args": {
-            "part_number": "PN-7782"
-          }
-        },
-        {
-          "tool": "ops_find_orders_by_part",
-          "args": {
-            "part_number": "PN-7782"
-          }
-        }
-      ],
-      "difficulty": "easy",
-      "question": "When will part PN-7782 be restocked?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "restock-003",
-      "template_id": "restock-check",
-      "params": {
-        "part_number": "PN-4421"
-      },
-      "category": "policy",
-      "expected_answer": "2026-09-10",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_inventory",
-          "args": {
-            "part_number": "PN-4421"
-          }
-        },
-        {
-          "tool": "ops_find_orders_by_part",
-          "args": {
-            "part_number": "PN-4421"
-          }
-        }
-      ],
-      "difficulty": "easy",
-      "question": "When will part PN-4421 be restocked?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "restock-004",
-      "template_id": "restock-check",
-      "params": {
-        "part_number": "PN-9901"
-      },
-      "category": "policy",
-      "expected_answer": "2026-09-20",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_inventory",
-          "args": {
-            "part_number": "PN-9901"
-          }
-        },
-        {
-          "tool": "ops_find_orders_by_part",
-          "args": {
-            "part_number": "PN-9901"
-          }
-        }
-      ],
-      "difficulty": "easy",
-      "question": "When will part PN-9901 be restocked?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "escalation-001",
-      "template_id": "escalation-for-order",
-      "params": {
-        "order_id": "ORD-2001"
-      },
-      "category": "support",
-      "expected_answer": "TKT-5001",
-      "expected_tool_calls": [
-        {
-          "tool": "mcp_search_tickets",
-          "args": {
-            "query": "ORD-2001"
-          }
-        },
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "escalation matrix"
-          }
-        }
-      ],
-      "difficulty": "medium",
-      "question": "Is there an open escalation for order ORD-2001?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "escalation-002",
-      "template_id": "escalation-for-order",
-      "params": {
-        "order_id": "ORD-2008"
-      },
-      "category": "support",
-      "expected_answer": "TKT-5004",
-      "expected_tool_calls": [
-        {
-          "tool": "mcp_search_tickets",
-          "args": {
-            "query": "ORD-2008"
-          }
-        },
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "escalation"
-          }
-        }
-      ],
-      "difficulty": "medium",
-      "question": "Is there an open escalation for order ORD-2008?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "escalation-003",
-      "template_id": "escalation-for-order",
-      "params": {
-        "order_id": "ORD-2004"
-      },
-      "category": "support",
-      "expected_answer": "resolved",
-      "expected_tool_calls": [
-        {
-          "tool": "mcp_search_tickets",
-          "args": {
-            "query": "ORD-2004"
-          }
-        },
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "escalation"
-          }
-        }
-      ],
-      "difficulty": "medium",
-      "question": "Is there an open escalation for order ORD-2004?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "escalation-004",
-      "template_id": "escalation-for-order",
-      "params": {
-        "order_id": "ORD-2003"
-      },
-      "category": "support",
+      "category": "outbound",
       "expected_answer": "no",
       "expected_tool_calls": [
         {
-          "tool": "mcp_search_tickets",
+          "tool": "wh_get_pick_order",
           "args": {
-            "query": "ORD-2003"
+            "pick_id": "PK-5008"
           }
         },
         {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2003"
-          }
-        }
-      ],
-      "difficulty": "easy",
-      "question": "Is there an open escalation for order ORD-2003?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "part-delay-001",
-      "template_id": "part-delay-cause",
-      "params": {
-        "part_number": "PN-7782"
-      },
-      "category": "parts_trace",
-      "expected_answer": "qc_failed",
-      "expected_tool_calls": [
+          "tool": "wh_get_warehouse_date",
+          "args": {}
+        },
         {
-          "tool": "ops_get_part_history",
+          "tool": "wh_get_sku",
           "args": {
-            "part_number": "PN-7782"
+            "sku": "SKU-FST-M8"
           }
         },
         {
           "tool": "rag_search",
           "args": {
-            "query": "part traceability"
+            "query": "ship-by SLA"
           }
         }
       ],
+      "question": "Will pick order PK-5008 miss its ship-by date?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "What caused delays for part PN-7782?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "part-delay-002",
-      "template_id": "part-delay-cause",
+      "id": "lot-recall-001",
+      "template_id": "lot-recall",
       "params": {
-        "part_number": "PN-3309"
+        "lot_id": "LOT-GR-044"
       },
-      "category": "parts_trace",
-      "expected_answer": "Missed transfer scan",
+      "category": "inventory",
+      "expected_answer": "PK-5002",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_part_history",
+          "tool": "wh_find_picks_by_lot",
           "args": {
-            "part_number": "PN-3309"
+            "lot_id": "LOT-GR-044"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-GR-044"
+          }
+        },
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5002"
           }
         },
         {
           "tool": "rag_search",
           "args": {
-            "query": "part traceability delays"
+            "query": "lot traceability recall"
           }
         }
       ],
+      "question": "Which pick orders include lot LOT-GR-044 and what's the lot history?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "What caused delays for part PN-3309?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "part-delay-003",
-      "template_id": "part-delay-cause",
+      "id": "lot-recall-002",
+      "template_id": "lot-recall",
       "params": {
-        "part_number": "PN-9901"
+        "lot_id": "LOT-BK-210"
       },
-      "category": "parts_trace",
-      "expected_answer": "Customs hold",
+      "category": "inventory",
+      "expected_answer": "PK-5005",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_part_history",
+          "tool": "wh_find_picks_by_lot",
           "args": {
-            "part_number": "PN-9901"
+            "lot_id": "LOT-BK-210"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-BK-210"
+          }
+        },
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5003"
           }
         },
         {
           "tool": "rag_search",
           "args": {
-            "query": "part traceability"
+            "query": "traceability"
           }
         }
       ],
+      "question": "Which pick orders include lot LOT-BK-210 and what's the lot history?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "What caused delays for part PN-9901?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "part-delay-004",
-      "template_id": "part-delay-cause",
+      "id": "lot-recall-003",
+      "template_id": "lot-recall",
       "params": {
-        "part_number": "PN-4421"
+        "lot_id": "LOT-IC-009"
       },
-      "category": "parts_trace",
-      "expected_answer": "no delay",
+      "category": "inventory",
+      "expected_answer": "PK-5007",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_part_history",
+          "tool": "wh_find_picks_by_lot",
           "args": {
-            "part_number": "PN-4421"
+            "lot_id": "LOT-IC-009"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-IC-009"
+          }
+        },
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5007"
           }
         },
         {
           "tool": "rag_search",
           "args": {
-            "query": "part traceability"
+            "query": "lot traceability"
           }
         }
       ],
-      "difficulty": "easy",
-      "question": "What caused delays for part PN-4421?",
-      "min_tool_calls": 2
-    },
-    {
-      "id": "blocker-001",
-      "template_id": "fulfillment-blocker",
-      "params": {
-        "order_id": "ORD-2007"
-      },
-      "category": "support",
-      "expected_answer": "payment_verification",
-      "expected_tool_calls": [
-        {
-          "tool": "ops_get_order",
-          "args": {
-            "order_id": "ORD-2007"
-          }
-        },
-        {
-          "tool": "rag_search",
-          "args": {
-            "query": "order hold policy"
-          }
-        }
-      ],
+      "question": "Which pick orders include lot LOT-IC-009 and what's the lot history?",
+      "min_tool_calls": 4,
       "difficulty": "medium",
-      "question": "What is blocking fulfillment of order ORD-2007?",
-      "min_tool_calls": 2
+      "notes": ""
     },
     {
-      "id": "blocker-002",
-      "template_id": "fulfillment-blocker",
+      "id": "lot-recall-004",
+      "template_id": "lot-recall",
       "params": {
-        "order_id": "ORD-2003"
+        "lot_id": "LOT-CD-019"
       },
-      "category": "support",
-      "expected_answer": "inventory",
+      "category": "inventory",
+      "expected_answer": "PK-5002",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_order",
+          "tool": "wh_find_picks_by_lot",
           "args": {
-            "order_id": "ORD-2003"
+            "lot_id": "LOT-CD-019"
           }
         },
         {
-          "tool": "ops_get_inventory",
+          "tool": "wh_get_lot_trace",
           "args": {
-            "part_number": "PN-1100"
+            "lot_id": "LOT-CD-019"
+          }
+        },
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5002"
           }
         },
         {
           "tool": "rag_search",
           "args": {
-            "query": "inventory allocation"
+            "query": "cold chain"
+          }
+        }
+      ],
+      "question": "Which pick orders include lot LOT-CD-019 and what's the lot history?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "equip-001",
+      "template_id": "equipment-check",
+      "params": {
+        "zone": "PICK-FACE"
+      },
+      "category": "operations",
+      "expected_answer": "down",
+      "expected_tool_calls": [
+        {
+          "tool": "wms_list_equipment_by_zone",
+          "args": {
+            "zone": "PICK-FACE"
+          }
+        },
+        {
+          "tool": "wh_get_replenishment_tasks",
+          "args": {
+            "zone": "PICK-FACE"
+          }
+        },
+        {
+          "tool": "wms_get_work_order",
+          "args": {
+            "work_order_id": "WO-7001"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "equipment assignment"
+          }
+        }
+      ],
+      "question": "Is equipment available in zone PICK-FACE to complete replenishment?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "equip-002",
+      "template_id": "equipment-check",
+      "params": {
+        "zone": "BULK-A"
+      },
+      "category": "operations",
+      "expected_answer": "available",
+      "expected_tool_calls": [
+        {
+          "tool": "wms_list_equipment_by_zone",
+          "args": {
+            "zone": "BULK-A"
+          }
+        },
+        {
+          "tool": "wh_get_replenishment_tasks",
+          "args": {
+            "zone": "BULK-A"
+          }
+        },
+        {
+          "tool": "wms_get_equipment",
+          "args": {
+            "equipment_id": "FL-01"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "equipment"
+          }
+        }
+      ],
+      "question": "Is equipment available in zone BULK-A to complete replenishment?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "equip-003",
+      "template_id": "equipment-check",
+      "params": {
+        "zone": "COLD"
+      },
+      "category": "operations",
+      "expected_answer": "available",
+      "expected_tool_calls": [
+        {
+          "tool": "wms_list_equipment_by_zone",
+          "args": {
+            "zone": "COLD"
+          }
+        },
+        {
+          "tool": "wh_get_replenishment_tasks",
+          "args": {
+            "zone": "COLD"
+          }
+        },
+        {
+          "tool": "wms_get_work_order",
+          "args": {
+            "work_order_id": "WO-7003"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "equipment assignment"
+          }
+        }
+      ],
+      "question": "Is equipment available in zone COLD to complete replenishment?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "equip-004",
+      "template_id": "equipment-check",
+      "params": {
+        "zone": "PICK-FACE"
+      },
+      "category": "operations",
+      "expected_answer": "FL-02",
+      "expected_tool_calls": [
+        {
+          "tool": "wms_list_equipment_by_zone",
+          "args": {
+            "zone": "PICK-FACE"
+          }
+        },
+        {
+          "tool": "wms_get_equipment",
+          "args": {
+            "equipment_id": "FL-02"
+          }
+        },
+        {
+          "tool": "wms_search_incidents",
+          "args": {
+            "query": "FL-02"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "replenishment blocked"
           }
         }
       ],
       "difficulty": "hard",
-      "question": "What is blocking fulfillment of order ORD-2003?",
-      "min_tool_calls": 2
+      "question": "Is equipment available in zone PICK-FACE to complete replenishment?",
+      "min_tool_calls": 4,
+      "notes": ""
     },
     {
-      "id": "blocker-003",
-      "template_id": "fulfillment-blocker",
+      "id": "cycle-001",
+      "template_id": "cycle-count",
       "params": {
-        "order_id": "ORD-2002"
+        "location_id": "B-08-05"
       },
-      "category": "support",
-      "expected_answer": "Weather delay",
+      "category": "inventory",
+      "expected_answer": "damaged",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_order",
+          "tool": "wh_get_location",
           "args": {
-            "order_id": "ORD-2002"
+            "location_id": "B-08-05"
           }
         },
         {
-          "tool": "ops_get_shipment",
+          "tool": "wh_get_bin_contents",
           "args": {
-            "order_id": "ORD-2002"
+            "location_id": "B-08-05"
+          }
+        },
+        {
+          "tool": "wms_search_incidents",
+          "args": {
+            "query": "B-08-05"
+          }
+        },
+        {
+          "tool": "wms_get_work_order",
+          "args": {
+            "work_order_id": "WO-7002"
+          }
+        }
+      ],
+      "question": "Explain the inventory issue at location B-08-05",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "cycle-002",
+      "template_id": "cycle-count",
+      "params": {
+        "location_id": "A-04-01"
+      },
+      "category": "inventory",
+      "expected_answer": "stockout",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_location",
+          "args": {
+            "location_id": "A-04-01"
+          }
+        },
+        {
+          "tool": "wh_get_bin_contents",
+          "args": {
+            "location_id": "A-04-01"
+          }
+        },
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-FST-M8"
+          }
+        },
+        {
+          "tool": "wms_search_incidents",
+          "args": {
+            "query": "SKU-FST-M8"
+          }
+        }
+      ],
+      "question": "Explain the inventory issue at location A-04-01",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "cycle-003",
+      "template_id": "cycle-count",
+      "params": {
+        "location_id": "Q-03-01"
+      },
+      "category": "inventory",
+      "expected_answer": "qc_hold",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_location",
+          "args": {
+            "location_id": "Q-03-01"
+          }
+        },
+        {
+          "tool": "wh_get_bin_contents",
+          "args": {
+            "location_id": "Q-03-01"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-GR-043"
+          }
+        },
+        {
+          "tool": "wms_search_incidents",
+          "args": {
+            "query": "LOT-GR-043"
+          }
+        }
+      ],
+      "question": "Explain the inventory issue at location Q-03-01",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "cycle-004",
+      "template_id": "cycle-count",
+      "params": {
+        "location_id": "R-01-01"
+      },
+      "category": "inventory",
+      "expected_answer": "receiving",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_location",
+          "args": {
+            "location_id": "R-01-01"
+          }
+        },
+        {
+          "tool": "wh_get_bin_contents",
+          "args": {
+            "location_id": "R-01-01"
+          }
+        },
+        {
+          "tool": "wh_get_inbound",
+          "args": {
+            "inbound_id": "INB-3004"
+          }
+        },
+        {
+          "tool": "wms_get_work_order",
+          "args": {
+            "work_order_id": "WO-7001"
+          }
+        }
+      ],
+      "question": "Explain the inventory issue at location R-01-01",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "cold-001",
+      "template_id": "cold-chain",
+      "params": {
+        "pick_id": "PK-5002"
+      },
+      "category": "outbound",
+      "expected_answer": "temp_check_passed",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5002"
+          }
+        },
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-COLD-110"
+          }
+        },
+        {
+          "tool": "wh_get_lot_trace",
+          "args": {
+            "lot_id": "LOT-CD-019"
           }
         },
         {
           "tool": "rag_search",
           "args": {
-            "query": "shipping SLA carrier delays"
+            "query": "cold chain compliance"
           }
         }
       ],
-      "difficulty": "hard",
-      "question": "What is blocking fulfillment of order ORD-2002?",
-      "min_tool_calls": 2
+      "question": "Are cold chain requirements met for pick order PK-5002?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
     },
     {
-      "id": "blocker-004",
-      "template_id": "fulfillment-blocker",
+      "id": "cold-002",
+      "template_id": "cold-chain",
       "params": {
-        "order_id": "ORD-2006"
+        "pick_id": "PK-5005"
       },
-      "category": "support",
-      "expected_answer": "inventory",
+      "category": "outbound",
+      "expected_answer": "cold_chain",
       "expected_tool_calls": [
         {
-          "tool": "ops_get_order",
+          "tool": "wh_get_pick_order",
           "args": {
-            "order_id": "ORD-2006"
+            "pick_id": "PK-5005"
           }
         },
         {
-          "tool": "ops_get_inventory",
+          "tool": "wh_get_sku",
           "args": {
-            "part_number": "PN-1100"
+            "sku": "SKU-GR-7782"
+          }
+        },
+        {
+          "tool": "wh_get_worker",
+          "args": {
+            "worker_id": "WK-003"
           }
         },
         {
           "tool": "rag_search",
           "args": {
-            "query": "inventory allocation"
+            "query": "cold chain"
           }
         }
       ],
-      "difficulty": "hard",
-      "question": "What is blocking fulfillment of order ORD-2006?",
-      "min_tool_calls": 2
+      "question": "Are cold chain requirements met for pick order PK-5005?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "cold-003",
+      "template_id": "cold-chain",
+      "params": {
+        "pick_id": "PK-5001"
+      },
+      "category": "outbound",
+      "expected_answer": "not required",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5001"
+          }
+        },
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-HVA-4421"
+          }
+        },
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-FST-M8"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "cold chain"
+          }
+        }
+      ],
+      "question": "Are cold chain requirements met for pick order PK-5001?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "cold-004",
+      "template_id": "cold-chain",
+      "params": {
+        "pick_id": "PK-5002"
+      },
+      "category": "outbound",
+      "expected_answer": "WK-002",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5002"
+          }
+        },
+        {
+          "tool": "wh_get_worker",
+          "args": {
+            "worker_id": "WK-002"
+          }
+        },
+        {
+          "tool": "wms_get_work_order",
+          "args": {
+            "work_order_id": "WO-7003"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "cold chain certification"
+          }
+        }
+      ],
+      "question": "Are cold chain requirements met for pick order PK-5002?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "hazmat-001",
+      "template_id": "hazmat-pick",
+      "params": {
+        "pick_id": "PK-5007"
+      },
+      "category": "operations",
+      "expected_answer": "hazmat",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5007"
+          }
+        },
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-CTL-9901"
+          }
+        },
+        {
+          "tool": "wms_get_shift_roster",
+          "args": {
+            "shift_id": "SHIFT-DAY"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "hazmat pick rules"
+          }
+        }
+      ],
+      "question": "Can pick order PK-5007 be picked safely on the current shift?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "hazmat-002",
+      "template_id": "hazmat-pick",
+      "params": {
+        "pick_id": "PK-5001"
+      },
+      "category": "operations",
+      "expected_answer": "safe",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5001"
+          }
+        },
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-HVA-4421"
+          }
+        },
+        {
+          "tool": "wms_get_shift_roster",
+          "args": {
+            "shift_id": "SHIFT-DAY"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "hazmat"
+          }
+        }
+      ],
+      "question": "Can pick order PK-5001 be picked safely on the current shift?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "hazmat-003",
+      "template_id": "hazmat-pick",
+      "params": {
+        "pick_id": "PK-5007"
+      },
+      "category": "operations",
+      "expected_answer": "WK-001",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5007"
+          }
+        },
+        {
+          "tool": "wms_search_incidents",
+          "args": {
+            "query": "PK-5007 hazmat"
+          }
+        },
+        {
+          "tool": "wms_get_shift_roster",
+          "args": {
+            "shift_id": "SHIFT-DAY"
+          }
+        },
+        {
+          "tool": "wh_get_worker",
+          "args": {
+            "worker_id": "WK-001"
+          }
+        }
+      ],
+      "question": "Can pick order PK-5007 be picked safely on the current shift?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
+    },
+    {
+      "id": "hazmat-004",
+      "template_id": "hazmat-pick",
+      "params": {
+        "pick_id": "PK-5005"
+      },
+      "category": "operations",
+      "expected_answer": "safe",
+      "expected_tool_calls": [
+        {
+          "tool": "wh_get_pick_order",
+          "args": {
+            "pick_id": "PK-5005"
+          }
+        },
+        {
+          "tool": "wh_get_sku",
+          "args": {
+            "sku": "SKU-BKT-3309"
+          }
+        },
+        {
+          "tool": "wms_get_shift_roster",
+          "args": {
+            "shift_id": "SHIFT-DAY"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "hazmat pick"
+          }
+        }
+      ],
+      "question": "Can pick order PK-5005 be picked safely on the current shift?",
+      "min_tool_calls": 4,
+      "difficulty": "medium",
+      "notes": ""
     }
   ]
 }

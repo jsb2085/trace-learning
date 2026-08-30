@@ -8,7 +8,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from trace_learning.agent.deep_agent import create_deep_agent
+from trace_learning.agent.warehouse_agent import create_warehouse_agent
 from trace_learning.eval.dataset import DEFAULT_DATASET_PATH
 from trace_learning.eval.runner import EvalRunner
 
@@ -36,7 +36,7 @@ def main() -> None:
     dataset = EvalDataset.load(args.dataset)
     print("Dataset coverage:", dataset.coverage_report())
 
-    agent = create_deep_agent()
+    agent = create_warehouse_agent()
     runner = EvalRunner(agent, dataset)
 
     if args.id:

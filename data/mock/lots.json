@@ -1,0 +1,61 @@
+{
+  "lots": [
+    {
+      "lot_id": "LOT-HV-081",
+      "sku": "SKU-HVA-4421",
+      "events": [
+        {"timestamp": "2026-08-20T09:00:00Z", "event": "received", "location": "R-01-01", "detail": "Inbound INB-3002"},
+        {"timestamp": "2026-08-21T11:00:00Z", "event": "qc_passed", "location": "QC-HOLD", "detail": "Visual inspection passed"},
+        {"timestamp": "2026-08-22T08:00:00Z", "event": "putaway", "location": "A-12-03", "detail": "Putaway by WK-001"}
+      ]
+    },
+    {
+      "lot_id": "LOT-GR-044",
+      "sku": "SKU-GR-7782",
+      "events": [
+        {"timestamp": "2026-08-18T10:00:00Z", "event": "received", "location": "R-01-01", "detail": "Inbound INB-3001"},
+        {"timestamp": "2026-08-18T16:00:00Z", "event": "qc_failed", "location": "Q-03-01", "detail": "Tooth pitch out of tolerance"},
+        {"timestamp": "2026-08-19T09:00:00Z", "event": "rework_started", "location": "Q-03-01", "detail": "Sent to rework vendor"},
+        {"timestamp": "2026-08-22T13:00:00Z", "event": "qc_passed", "location": "Q-03-01", "detail": "Rework verified"},
+        {"timestamp": "2026-08-23T07:00:00Z", "event": "putaway", "location": "C-02-01", "detail": "Cold zone putaway"}
+      ]
+    },
+    {
+      "lot_id": "LOT-BK-210",
+      "sku": "SKU-BKT-3309",
+      "events": [
+        {"timestamp": "2026-08-15T08:00:00Z", "event": "received", "location": "R-01-01", "detail": "Inbound INB-3000"},
+        {"timestamp": "2026-08-15T14:00:00Z", "event": "putaway", "location": "B-08-04", "detail": "Bulk putaway"},
+        {"timestamp": "2026-08-28T10:00:00Z", "event": "damage_reported", "location": "B-08-05", "detail": "Forklift impact — 40 units damaged"}
+      ]
+    },
+    {
+      "lot_id": "LOT-IC-009",
+      "sku": "SKU-CTL-9901",
+      "events": [
+        {"timestamp": "2026-08-10T09:00:00Z", "event": "received", "location": "R-01-01", "detail": "Inbound INB-2999"},
+        {"timestamp": "2026-08-12T14:00:00Z", "event": "qc_failed", "location": "Q-03-01", "detail": "Firmware flash timeout"},
+        {"timestamp": "2026-08-14T10:00:00Z", "event": "rework_started", "location": "Q-03-01", "detail": "Firmware reflash"},
+        {"timestamp": "2026-08-16T11:00:00Z", "event": "qc_passed", "location": "Q-03-01", "detail": "Firmware v2.4.1 verified"},
+        {"timestamp": "2026-08-17T08:00:00Z", "event": "putaway", "location": "B-14-02", "detail": "Hazmat bin putaway"}
+      ]
+    },
+    {
+      "lot_id": "LOT-FS-220",
+      "sku": "SKU-FST-M8",
+      "events": [
+        {"timestamp": "2026-08-25T07:00:00Z", "event": "received", "location": "R-01-01", "detail": "Partial receipt"},
+        {"timestamp": "2026-08-26T09:00:00Z", "event": "putaway", "location": "A-04-01", "detail": "Allocated to open picks — stockout imminent"}
+      ]
+    },
+    {
+      "lot_id": "LOT-CD-019",
+      "sku": "SKU-COLD-110",
+      "events": [
+        {"timestamp": "2026-08-24T06:00:00Z", "event": "received", "location": "R-01-01", "detail": "Cold chain inbound INB-3003"},
+        {"timestamp": "2026-08-24T08:00:00Z", "event": "temp_check_passed", "location": "R-01-01", "detail": "2-8°C verified"},
+        {"timestamp": "2026-08-24T10:00:00Z", "event": "putaway", "location": "K-01-02", "detail": "Cold putaway within 30 min SLA"}
+      ]
+    }
+  ]
+}

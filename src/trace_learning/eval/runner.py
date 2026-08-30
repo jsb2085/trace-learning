@@ -8,7 +8,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from trace_learning.agent.deep_agent import DeepAgent
+from trace_learning.agent.warehouse_agent import WarehouseAgent
 from trace_learning.eval.dataset import EvalDataset, EvalQuestion
 
 
@@ -25,7 +25,7 @@ class EvalResult(BaseModel):
 class EvalRunner:
     """Execute eval questions and compare outputs."""
 
-    def __init__(self, agent: DeepAgent, dataset: EvalDataset) -> None:
+    def __init__(self, agent: WarehouseAgent, dataset: EvalDataset) -> None:
         self._agent = agent
         self._dataset = dataset
 

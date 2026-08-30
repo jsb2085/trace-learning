@@ -1,5 +1,5 @@
-"""Built-in mock tools (non-MCP, non-RAG)."""
+"""Utility tools for warehouse calculations."""
 
-from trace_learning.mock.tools.registry import BUILTIN_TOOLS, get_builtin_tools
+from trace_learning.mock.tools.registry import UTILITY_TOOLS, get_utility_tools
 
-__all__ = ["BUILTIN_TOOLS", "get_builtin_tools"]
+__all__ = ["UTILITY_TOOLS", "get_utility_tools"]
