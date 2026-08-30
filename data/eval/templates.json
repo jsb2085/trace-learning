@@ -1,0 +1,124 @@
+{
+  "templates": [
+    {
+      "id": "late-orders",
+      "template": "What orders are late as of {as_of_date}?",
+      "category": "fulfillment",
+      "description": "Look up late-order policy, then query ops for orders past promised delivery.",
+      "min_tool_calls": 2,
+      "required_tool_groups": ["rag", "ops"]
+    },
+    {
+      "id": "part-history",
+      "template": "What happened to part {part_number}?",
+      "category": "parts_trace",
+      "description": "Retrieve part event timeline and cross-reference active orders.",
+      "min_tool_calls": 2,
+      "required_tool_groups": ["ops"]
+    },
+    {
+      "id": "order-delay-reason",
+      "template": "Why is order {order_id} delayed?",
+      "category": "fulfillment",
+      "description": "Inspect order, shipment scans, and part-level delay events.",
+      "min_tool_calls": 3,
+      "required_tool_groups": ["ops"]
+    },
+    {
+      "id": "refund-eligibility",
+      "template": "Is order {order_id} eligible for a full refund?",
+      "category": "policy",
+      "description": "Compare order dates/status against refund policy.",
+      "min_tool_calls": 2,
+      "required_tool_groups": ["ops", "rag"]
+    },
+    {
+      "id": "shipment-eta",
+      "template": "When will order {order_id} arrive?",
+      "category": "fulfillment",
+      "description": "Combine shipment tracking with shipping SLA policy.",
+      "min_tool_calls": 3,
+      "required_tool_groups": ["ops", "rag"]
+    },
+    {
+      "id": "qc-on-order",
+      "template": "Did any parts on order {order_id} fail QC?",
+      "category": "parts_trace",
+      "description": "Walk order line items and inspect part QC events.",
+      "min_tool_calls": 2,
+      "required_tool_groups": ["ops", "rag"]
+    },
+    {
+      "id": "inventory-fulfillment",
+      "template": "Can order {order_id} be fulfilled from current inventory?",
+      "category": "policy",
+      "description": "Check line-item inventory availability against allocation rules.",
+      "min_tool_calls": 2,
+      "required_tool_groups": ["ops", "rag"]
+    },
+    {
+      "id": "ticket-owner",
+      "template": "Who owns ticket {ticket_id} and what is it about?",
+      "category": "support",
+      "description": "Fetch ticket then resolve owner via user directory.",
+      "min_tool_calls": 2,
+      "required_tool_groups": ["mcp"]
+    },
+    {
+      "id": "customer-open-orders",
+      "template": "What non-delivered orders does customer {customer_id} have?",
+      "category": "fulfillment",
+      "description": "Query orders by customer and filter out delivered status.",
+      "min_tool_calls": 2,
+      "required_tool_groups": ["ops"]
+    },
+    {
+      "id": "orders-with-part",
+      "template": "Which orders include part {part_number} and what are their statuses?",
+      "category": "parts_trace",
+      "description": "Find orders by part number and summarize status.",
+      "min_tool_calls": 2,
+      "required_tool_groups": ["ops"]
+    },
+    {
+      "id": "days-late",
+      "template": "How many days late is order {order_id} as of {as_of_date}?",
+      "category": "fulfillment",
+      "description": "Get order promised date, business rules, and compute day delta.",
+      "min_tool_calls": 3,
+      "required_tool_groups": ["ops", "rag"]
+    },
+    {
+      "id": "restock-check",
+      "template": "When will part {part_number} be restocked?",
+      "category": "policy",
+      "description": "Check inventory restock schedule; cross-reference blocking orders if stockout.",
+      "min_tool_calls": 2,
+      "required_tool_groups": ["ops"]
+    },
+    {
+      "id": "escalation-for-order",
+      "template": "Is there an open escalation for order {order_id}?",
+      "category": "support",
+      "description": "Search tickets by order and check escalation policy.",
+      "min_tool_calls": 2,
+      "required_tool_groups": ["mcp", "rag"]
+    },
+    {
+      "id": "part-delay-cause",
+      "template": "What caused delays for part {part_number}?",
+      "category": "parts_trace",
+      "description": "Analyze part timeline for qc_failed, rework, and delay_logged events.",
+      "min_tool_calls": 2,
+      "required_tool_groups": ["ops", "rag"]
+    },
+    {
+      "id": "fulfillment-blocker",
+      "template": "What is blocking fulfillment of order {order_id}?",
+      "category": "support",
+      "description": "Determine whether hold status, inventory, or shipment delays block the order.",
+      "min_tool_calls": 2,
+      "required_tool_groups": ["ops", "rag"]
+    }
+  ]
+}

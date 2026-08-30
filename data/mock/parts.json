@@ -1,0 +1,62 @@
+{
+  "parts": [
+    {
+      "part_number": "PN-4421",
+      "name": "Hydraulic Valve Assembly",
+      "supplier_id": "SUP-01",
+      "events": [
+        {"timestamp": "2026-08-20T09:00:00Z", "event": "manufactured", "location": "Plant-A", "detail": "Batch HV-2026-081"},
+        {"timestamp": "2026-08-21T11:30:00Z", "event": "qc_passed", "location": "Plant-A", "detail": "All dimensions within spec"},
+        {"timestamp": "2026-08-22T08:00:00Z", "event": "allocated", "location": "Warehouse-East", "detail": "Reserved for ORD-2001"},
+        {"timestamp": "2026-08-23T14:00:00Z", "event": "shipped", "location": "Warehouse-East", "detail": "SHP-9001 via FedEx"}
+      ]
+    },
+    {
+      "part_number": "PN-7782",
+      "name": "Precision Gear Module",
+      "supplier_id": "SUP-02",
+      "events": [
+        {"timestamp": "2026-08-18T10:00:00Z", "event": "manufactured", "location": "Plant-B", "detail": "Batch PG-2026-044"},
+        {"timestamp": "2026-08-18T16:00:00Z", "event": "qc_failed", "location": "Plant-B", "detail": "Tooth pitch out of tolerance by 0.02mm"},
+        {"timestamp": "2026-08-19T09:00:00Z", "event": "rework_started", "location": "Plant-B", "detail": "Rework ticket RW-118"},
+        {"timestamp": "2026-08-22T13:00:00Z", "event": "qc_passed", "location": "Plant-B", "detail": "Rework verified"},
+        {"timestamp": "2026-08-26T07:00:00Z", "event": "shipped", "location": "Warehouse-West", "detail": "SHP-9002 delayed departure — carrier capacity"},
+        {"timestamp": "2026-08-27T09:00:00Z", "event": "delay_logged", "location": "In-transit", "detail": "Weather delay in Denver hub"}
+      ]
+    },
+    {
+      "part_number": "PN-3309",
+      "name": "Steel Mounting Bracket",
+      "supplier_id": "SUP-01",
+      "events": [
+        {"timestamp": "2026-08-15T08:00:00Z", "event": "manufactured", "location": "Plant-A", "detail": "Batch SB-2026-210"},
+        {"timestamp": "2026-08-15T12:00:00Z", "event": "qc_passed", "location": "Plant-A", "detail": "Passed"},
+        {"timestamp": "2026-08-20T10:00:00Z", "event": "shipped", "location": "Warehouse-East", "detail": "SHP-9004"},
+        {"timestamp": "2026-08-28T06:00:00Z", "event": "delay_logged", "location": "In-transit", "detail": "Missed transfer scan — investigating"}
+      ]
+    },
+    {
+      "part_number": "PN-1100",
+      "name": "Fastener Kit M8",
+      "supplier_id": "SUP-03",
+      "events": [
+        {"timestamp": "2026-08-25T07:00:00Z", "event": "received", "location": "Warehouse-East", "detail": "Inbound from SUP-03"},
+        {"timestamp": "2026-08-26T09:00:00Z", "event": "qc_passed", "location": "Warehouse-East", "detail": "Count verified"},
+        {"timestamp": "2026-08-29T08:00:00Z", "event": "allocated", "location": "Warehouse-East", "detail": "Partial allocation for ORD-2003"}
+      ]
+    },
+    {
+      "part_number": "PN-9901",
+      "name": "Industrial Controller Board",
+      "supplier_id": "SUP-04",
+      "events": [
+        {"timestamp": "2026-08-10T09:00:00Z", "event": "manufactured", "location": "Plant-C", "detail": "Batch IC-2026-009"},
+        {"timestamp": "2026-08-12T14:00:00Z", "event": "qc_failed", "location": "Plant-C", "detail": "Firmware flash timeout"},
+        {"timestamp": "2026-08-14T10:00:00Z", "event": "rework_started", "location": "Plant-C", "detail": "Firmware reflash"},
+        {"timestamp": "2026-08-16T11:00:00Z", "event": "qc_passed", "location": "Plant-C", "detail": "Firmware v2.4.1 verified"},
+        {"timestamp": "2026-08-19T08:00:00Z", "event": "shipped", "location": "Warehouse-West", "detail": "SHP-9005"},
+        {"timestamp": "2026-08-24T15:00:00Z", "event": "delay_logged", "location": "In-transit", "detail": "Customs hold at port — resolved 2026-08-27"}
+      ]
+    }
+  ]
+}

@@ -2,43 +2,43 @@
   "documents": [
     {
       "id": "doc-001",
-      "title": "Refund Policy",
-      "body": "Customers may request a full refund within 30 days of purchase. After 30 days, store credit only."
+      "title": "Late Order Definition",
+      "body": "An order is considered late when today's date is after its promised_delivery date and the order status is not 'delivered'. Orders on hold follow separate escalation rules."
     },
     {
       "id": "doc-002",
       "title": "Shipping SLA",
-      "body": "Standard shipping delivers in 5-7 business days. Express shipping delivers in 1-2 business days."
+      "body": "Standard shipping: promised delivery is 5-7 business days from order creation. Express shipping: 1-2 business days. Carrier delays after ship date do not reset the promised delivery clock."
     },
     {
       "id": "doc-003",
-      "title": "Support Hours",
-      "body": "Live chat support is available Monday through Friday, 9am to 6pm Pacific Time."
+      "title": "Refund Policy",
+      "body": "Full refund within 30 days of order creation if not delivered. Partial refund for late delivery after 3+ days late if customer requests. Delivered orders are eligible for return within 14 days."
     },
     {
       "id": "doc-004",
-      "title": "Enterprise Plan",
-      "body": "The Enterprise plan includes SSO, audit logs, and a dedicated account manager. Minimum 50 seats."
+      "title": "QC Failure Escalation",
+      "body": "When a part fails QC, a quality ticket must be opened. Reworked parts require a second QC pass before allocation. Downstream orders may be delayed if rework exceeds 48 hours."
     },
     {
       "id": "doc-005",
-      "title": "API Rate Limits",
-      "body": "Free tier: 100 requests per minute. Pro tier: 1000 requests per minute. Enterprise: custom limits."
+      "title": "Inventory Allocation Rules",
+      "body": "Orders in 'processing' require available inventory for all line items. If available is zero, the order waits for next_restock_date. Partial allocation is allowed only for non-critical parts marked in the catalog."
     },
     {
       "id": "doc-006",
-      "title": "Data Retention",
-      "body": "User activity logs are retained for 90 days. Audit logs for Enterprise customers are retained for 1 year."
+      "title": "Order Hold Policy",
+      "body": "Orders on hold cannot ship until hold_reason is resolved. Common reasons: payment_verification, fraud_review, address_confirmation. Support must update the customer within 24 hours."
     },
     {
       "id": "doc-007",
-      "title": "Password Requirements",
-      "body": "Passwords must be at least 12 characters and include uppercase, lowercase, a number, and a symbol."
+      "title": "Escalation Matrix",
+      "body": "P1 tickets require fulfillment manager ownership. P2 tickets go to the assigned engineer. Lookup ticket owner via mcp_get_user after fetching the ticket."
     },
     {
       "id": "doc-008",
-      "title": "Incident Response",
-      "body": "P0 incidents require acknowledgment within 15 minutes and executive notification within 1 hour."
+      "title": "Part Traceability",
+      "body": "To explain part delays, retrieve the full event timeline with ops_get_part_history, then cross-reference active orders via ops_find_orders_by_part. Look for qc_failed, delay_logged, and rework_started events."
     }
   ]
 }

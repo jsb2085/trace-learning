@@ -1,532 +1,1717 @@
 {
-  "version": "0.1.0",
-  "description": "Eval dataset for trace-learning deep agent. Target: 60 questions (15 per category).",
+  "version": "0.2.0",
+  "description": "60 parameterized multi-tool eval instances (15 templates x 4 inputs each).",
   "questions": [
     {
-      "id": "rag-001",
-      "category": "rag",
-      "question": "What is the refund policy?",
-      "expected_answer": "30 days",
-      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "refund policy"}}],
-      "difficulty": "easy"
+      "id": "late-orders-001",
+      "template_id": "late-orders",
+      "params": {
+        "as_of_date": "2026-08-30"
+      },
+      "category": "fulfillment",
+      "expected_answer": "ORD-2001",
+      "expected_tool_calls": [
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "late order"
+          }
+        },
+        {
+          "tool": "ops_find_late_orders",
+          "args": {
+            "as_of_date": "2026-08-30"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "notes": "Also late: ORD-2002, ORD-2005, ORD-2008",
+      "question": "What orders are late as of 2026-08-30?",
+      "min_tool_calls": 2
     },
     {
-      "id": "rag-002",
-      "category": "rag",
-      "question": "How long does standard shipping take?",
-      "expected_answer": "5-7 business days",
-      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "standard shipping"}}],
-      "difficulty": "easy"
+      "id": "late-orders-002",
+      "template_id": "late-orders",
+      "params": {
+        "as_of_date": "2026-08-29"
+      },
+      "category": "fulfillment",
+      "expected_answer": "ORD-2008",
+      "expected_tool_calls": [
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "late order definition"
+          }
+        },
+        {
+          "tool": "ops_find_late_orders",
+          "args": {
+            "as_of_date": "2026-08-29"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "notes": "Also late: ORD-2001, ORD-2005",
+      "question": "What orders are late as of 2026-08-29?",
+      "min_tool_calls": 2
     },
     {
-      "id": "rag-003",
-      "category": "rag",
-      "question": "When is live chat support available?",
-      "expected_answer": "Monday through Friday, 9am to 6pm Pacific",
-      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "support hours"}}],
-      "difficulty": "easy"
+      "id": "late-orders-003",
+      "template_id": "late-orders",
+      "params": {
+        "as_of_date": "2026-08-28"
+      },
+      "category": "fulfillment",
+      "expected_answer": "ORD-2008",
+      "expected_tool_calls": [
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "late order"
+          }
+        },
+        {
+          "tool": "ops_find_late_orders",
+          "args": {
+            "as_of_date": "2026-08-28"
+          }
+        }
+      ],
+      "difficulty": "hard",
+      "notes": "Also late: ORD-2005 only",
+      "question": "What orders are late as of 2026-08-28?",
+      "min_tool_calls": 2
     },
     {
-      "id": "rag-004",
-      "category": "rag",
-      "question": "What is included in the Enterprise plan?",
-      "expected_answer": "SSO, audit logs, and a dedicated account manager",
-      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "Enterprise plan"}}],
-      "difficulty": "medium"
+      "id": "late-orders-004",
+      "template_id": "late-orders",
+      "params": {
+        "as_of_date": "2026-09-01"
+      },
+      "category": "fulfillment",
+      "expected_answer": "ORD-2007",
+      "expected_tool_calls": [
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "late order"
+          }
+        },
+        {
+          "tool": "ops_find_late_orders",
+          "args": {
+            "as_of_date": "2026-09-01"
+          }
+        }
+      ],
+      "difficulty": "hard",
+      "notes": "ORD-2007 on_hold also late; plus ORD-2001/2002/2005/2008",
+      "question": "What orders are late as of 2026-09-01?",
+      "min_tool_calls": 2
     },
     {
-      "id": "rag-005",
-      "category": "rag",
-      "question": "What are the API rate limits for the Pro tier?",
-      "expected_answer": "1000 requests per minute",
-      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "Pro tier rate limits"}}],
-      "difficulty": "medium"
+      "id": "part-history-001",
+      "template_id": "part-history",
+      "params": {
+        "part_number": "PN-7782"
+      },
+      "category": "parts_trace",
+      "expected_answer": "qc_failed",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-7782"
+          }
+        },
+        {
+          "tool": "ops_find_orders_by_part",
+          "args": {
+            "part_number": "PN-7782"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "What happened to part PN-7782?",
+      "min_tool_calls": 2
     },
     {
-      "id": "rag-006",
-      "category": "rag",
-      "question": "How long are user activity logs retained?",
-      "expected_answer": "90 days",
-      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "data retention"}}],
-      "difficulty": "easy"
+      "id": "part-history-002",
+      "template_id": "part-history",
+      "params": {
+        "part_number": "PN-9901"
+      },
+      "category": "parts_trace",
+      "expected_answer": "customs hold",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-9901"
+          }
+        },
+        {
+          "tool": "ops_find_orders_by_part",
+          "args": {
+            "part_number": "PN-9901"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "What happened to part PN-9901?",
+      "min_tool_calls": 2
     },
     {
-      "id": "rag-007",
-      "category": "rag",
-      "question": "What are the password requirements?",
-      "expected_answer": "at least 12 characters",
-      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "password requirements"}}],
-      "difficulty": "easy"
+      "id": "part-history-003",
+      "template_id": "part-history",
+      "params": {
+        "part_number": "PN-4421"
+      },
+      "category": "parts_trace",
+      "expected_answer": "qc_passed",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-4421"
+          }
+        },
+        {
+          "tool": "ops_find_orders_by_part",
+          "args": {
+            "part_number": "PN-4421"
+          }
+        }
+      ],
+      "difficulty": "easy",
+      "question": "What happened to part PN-4421?",
+      "min_tool_calls": 2
     },
     {
-      "id": "rag-008",
-      "category": "rag",
-      "question": "How quickly must P0 incidents be acknowledged?",
-      "expected_answer": "15 minutes",
-      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "P0 incidents"}}],
-      "difficulty": "medium"
+      "id": "part-history-004",
+      "template_id": "part-history",
+      "params": {
+        "part_number": "PN-3309"
+      },
+      "category": "parts_trace",
+      "expected_answer": "Missed transfer scan",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-3309"
+          }
+        },
+        {
+          "tool": "ops_find_orders_by_part",
+          "args": {
+            "part_number": "PN-3309"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "What happened to part PN-3309?",
+      "min_tool_calls": 2
     },
     {
-      "id": "rag-009",
-      "category": "rag",
-      "question": "What is the minimum seat count for Enterprise?",
-      "expected_answer": "50 seats",
-      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "Enterprise minimum seats"}}],
-      "difficulty": "medium"
+      "id": "order-delay-001",
+      "template_id": "order-delay-reason",
+      "params": {
+        "order_id": "ORD-2002"
+      },
+      "category": "fulfillment",
+      "expected_answer": "Weather delay",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2002"
+          }
+        },
+        {
+          "tool": "ops_get_shipment",
+          "args": {
+            "order_id": "ORD-2002"
+          }
+        },
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-7782"
+          }
+        }
+      ],
+      "difficulty": "hard",
+      "question": "Why is order ORD-2002 delayed?",
+      "min_tool_calls": 3
     },
     {
-      "id": "rag-010",
-      "category": "rag",
-      "question": "How long are Enterprise audit logs kept?",
-      "expected_answer": "1 year",
-      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "Enterprise audit logs retention"}}],
-      "difficulty": "medium"
+      "id": "order-delay-002",
+      "template_id": "order-delay-reason",
+      "params": {
+        "order_id": "ORD-2008"
+      },
+      "category": "fulfillment",
+      "expected_answer": "Customs hold",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2008"
+          }
+        },
+        {
+          "tool": "ops_get_shipment",
+          "args": {
+            "order_id": "ORD-2008"
+          }
+        },
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-9901"
+          }
+        }
+      ],
+      "difficulty": "hard",
+      "question": "Why is order ORD-2008 delayed?",
+      "min_tool_calls": 3
     },
     {
-      "id": "rag-011",
-      "category": "rag",
-      "question": "What is the free tier API rate limit?",
-      "expected_answer": "100 requests per minute",
-      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "free tier API"}}],
-      "difficulty": "easy"
+      "id": "order-delay-003",
+      "template_id": "order-delay-reason",
+      "params": {
+        "order_id": "ORD-2005"
+      },
+      "category": "fulfillment",
+      "expected_answer": "Missed transfer scan",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2005"
+          }
+        },
+        {
+          "tool": "ops_get_shipment",
+          "args": {
+            "order_id": "ORD-2005"
+          }
+        },
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-3309"
+          }
+        }
+      ],
+      "difficulty": "hard",
+      "question": "Why is order ORD-2005 delayed?",
+      "min_tool_calls": 3
     },
     {
-      "id": "rag-012",
-      "category": "rag",
-      "question": "How fast is express shipping?",
-      "expected_answer": "1-2 business days",
-      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "express shipping"}}],
-      "difficulty": "easy"
+      "id": "order-delay-004",
+      "template_id": "order-delay-reason",
+      "params": {
+        "order_id": "ORD-2001"
+      },
+      "category": "fulfillment",
+      "expected_answer": "in_transit",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2001"
+          }
+        },
+        {
+          "tool": "ops_get_shipment",
+          "args": {
+            "order_id": "ORD-2001"
+          }
+        },
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-4421"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "Why is order ORD-2001 delayed?",
+      "min_tool_calls": 3
     },
     {
-      "id": "rag-013",
-      "category": "rag",
-      "question": "Can customers get a refund after 30 days?",
-      "expected_answer": "store credit only",
-      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "refund after 30 days"}}],
-      "difficulty": "medium"
+      "id": "refund-001",
+      "template_id": "refund-eligibility",
+      "params": {
+        "order_id": "ORD-2003"
+      },
+      "category": "policy",
+      "expected_answer": "eligible",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2003"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "refund policy"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "Is order ORD-2003 eligible for a full refund?",
+      "min_tool_calls": 2
     },
     {
-      "id": "rag-014",
-      "category": "rag",
-      "question": "When must executives be notified for P0 incidents?",
-      "expected_answer": "within 1 hour",
-      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "executive notification P0"}}],
-      "difficulty": "hard"
-    },
-    {
-      "id": "rag-015",
-      "category": "rag",
-      "question": "What characters must a password include?",
-      "expected_answer": "uppercase, lowercase, a number, and a symbol",
-      "expected_tool_calls": [{"tool": "rag_search", "args": {"query": "password characters"}}],
-      "difficulty": "medium"
-    },
-
-    {
-      "id": "mcp-001",
-      "category": "mcp",
-      "question": "What does the onboarding document say about security training?",
-      "expected_answer": "within 7 days",
-      "expected_tool_calls": [{"tool": "mcp_read_file", "args": {"path": "docs/onboarding.md"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "mcp-002",
-      "category": "mcp",
-      "question": "How many days per week can employees work remotely?",
-      "expected_answer": "3 days per week",
-      "expected_tool_calls": [{"tool": "mcp_read_file", "args": {"path": "docs/policies/remote-work.md"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "mcp-003",
-      "category": "mcp",
-      "question": "What team is Alice Chen on?",
-      "expected_answer": "platform",
-      "expected_tool_calls": [{"tool": "mcp_get_user", "args": {"user_id": "u-001"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "mcp-004",
-      "category": "mcp",
-      "question": "What is Bob Rivera's role?",
-      "expected_answer": "analyst",
-      "expected_tool_calls": [{"tool": "mcp_get_user", "args": {"user_id": "u-002"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "mcp-005",
-      "category": "mcp",
-      "question": "What is the max_retries value in app config?",
-      "expected_answer": "3",
-      "expected_tool_calls": [{"tool": "mcp_read_file", "args": {"path": "config/app.json"}}],
-      "difficulty": "medium"
-    },
-    {
-      "id": "mcp-006",
-      "category": "mcp",
-      "question": "Search for files mentioning deploy.",
-      "expected_answer": "logs/deploy.txt",
-      "expected_tool_calls": [{"tool": "mcp_search_files", "args": {"query": "deploy"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "mcp-007",
-      "category": "mcp",
-      "question": "Find documents about remote work.",
-      "expected_answer": "docs/policies/remote-work.md",
-      "expected_tool_calls": [{"tool": "mcp_search_files", "args": {"query": "remote"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "mcp-008",
-      "category": "mcp",
-      "question": "Who is the manager on the platform team?",
-      "expected_answer": "Carol Wu",
-      "expected_tool_calls": [{"tool": "mcp_get_user", "args": {"user_id": "u-003"}}],
-      "difficulty": "medium"
-    },
-    {
-      "id": "mcp-009",
-      "category": "mcp",
-      "question": "What environment is configured in app.json?",
-      "expected_answer": "staging",
-      "expected_tool_calls": [{"tool": "mcp_read_file", "args": {"path": "config/app.json"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "mcp-010",
-      "category": "mcp",
-      "question": "Search for onboarding files.",
-      "expected_answer": "docs/onboarding.md",
-      "expected_tool_calls": [{"tool": "mcp_search_files", "args": {"query": "onboarding"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "mcp-011",
-      "category": "mcp",
-      "question": "What team is Carol Wu on?",
-      "expected_answer": "platform",
-      "expected_tool_calls": [{"tool": "mcp_get_user", "args": {"user_id": "u-003"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "mcp-012",
-      "category": "mcp",
-      "question": "Read the remote work policy file.",
-      "expected_answer": "Remote Work",
-      "expected_tool_calls": [{"tool": "mcp_read_file", "args": {"path": "docs/policies/remote-work.md"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "mcp-013",
-      "category": "mcp",
-      "question": "Search for config files.",
-      "expected_answer": "config/app.json",
-      "expected_tool_calls": [{"tool": "mcp_search_files", "args": {"query": "config"}}],
-      "difficulty": "medium"
-    },
-    {
-      "id": "mcp-014",
-      "category": "mcp",
-      "question": "What is Alice Chen's role?",
-      "expected_answer": "engineer",
-      "expected_tool_calls": [{"tool": "mcp_get_user", "args": {"user_id": "u-001"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "mcp-015",
-      "category": "mcp",
-      "question": "When did the most recent deploy succeed according to logs?",
-      "expected_answer": "2026-08-15",
-      "expected_tool_calls": [{"tool": "mcp_read_file", "args": {"path": "logs/deploy.txt"}}],
-      "difficulty": "hard"
-    },
-
-    {
-      "id": "builtin-001",
-      "category": "builtin",
-      "question": "What is 15 * 4 + 10?",
-      "expected_answer": "70",
-      "expected_tool_calls": [{"tool": "calculator", "args": {"expression": "15 * 4 + 10"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "builtin-002",
-      "category": "builtin",
-      "question": "What is the status of order ORD-1001?",
-      "expected_answer": "shipped",
-      "expected_tool_calls": [{"tool": "lookup_order", "args": {"order_id": "ORD-1001"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "builtin-003",
-      "category": "builtin",
-      "question": "What's the weather in Austin today?",
-      "expected_answer": "sunny",
-      "expected_tool_calls": [{"tool": "get_weather", "args": {"city": "Austin"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "builtin-004",
-      "category": "builtin",
-      "question": "How much did order ORD-1002 cost?",
-      "expected_answer": "129",
-      "expected_tool_calls": [{"tool": "lookup_order", "args": {"order_id": "ORD-1002"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "builtin-005",
-      "category": "builtin",
-      "question": "Calculate (100 - 25) / 5.",
-      "expected_answer": "15",
-      "expected_tool_calls": [{"tool": "calculator", "args": {"expression": "(100 - 25) / 5"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "builtin-006",
-      "category": "builtin",
-      "question": "What's the temperature in San Francisco?",
-      "expected_answer": "62",
-      "expected_tool_calls": [{"tool": "get_weather", "args": {"city": "San Francisco"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "builtin-007",
-      "category": "builtin",
-      "question": "What items are in order ORD-1003?",
-      "expected_answer": "widget-a",
-      "expected_tool_calls": [{"tool": "lookup_order", "args": {"order_id": "ORD-1003"}}],
-      "difficulty": "medium"
-    },
-    {
-      "id": "builtin-008",
-      "category": "builtin",
-      "question": "What's the weather like in New York?",
-      "expected_answer": "partly cloudy",
-      "expected_tool_calls": [{"tool": "get_weather", "args": {"city": "New York"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "builtin-009",
-      "category": "builtin",
-      "question": "What is 2.5 * 8?",
-      "expected_answer": "20",
-      "expected_tool_calls": [{"tool": "calculator", "args": {"expression": "2.5 * 8"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "builtin-010",
-      "category": "builtin",
-      "question": "Is order ORD-1002 still pending?",
-      "expected_answer": "pending",
-      "expected_tool_calls": [{"tool": "lookup_order", "args": {"order_id": "ORD-1002"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "builtin-011",
-      "category": "builtin",
-      "question": "What is the total for ORD-1001 in USD?",
-      "expected_answer": "49.99",
-      "expected_tool_calls": [{"tool": "lookup_order", "args": {"order_id": "ORD-1001"}}],
-      "difficulty": "medium"
-    },
-    {
-      "id": "builtin-012",
-      "category": "builtin",
-      "question": "Compute 3 * 3 * 3.",
-      "expected_answer": "27",
-      "expected_tool_calls": [{"tool": "calculator", "args": {"expression": "3 * 3 * 3"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "builtin-013",
-      "category": "builtin",
-      "question": "Has order ORD-1003 been delivered?",
+      "id": "refund-002",
+      "template_id": "refund-eligibility",
+      "params": {
+        "order_id": "ORD-2004"
+      },
+      "category": "policy",
       "expected_answer": "delivered",
-      "expected_tool_calls": [{"tool": "lookup_order", "args": {"order_id": "ORD-1003"}}],
-      "difficulty": "easy"
-    },
-    {
-      "id": "builtin-014",
-      "category": "builtin",
-      "question": "What's the weather condition in Austin?",
-      "expected_answer": "95",
-      "expected_tool_calls": [{"tool": "get_weather", "args": {"city": "Austin"}}],
-      "difficulty": "medium"
-    },
-    {
-      "id": "builtin-015",
-      "category": "builtin",
-      "question": "Calculate 1000 / 40.",
-      "expected_answer": "25",
-      "expected_tool_calls": [{"tool": "calculator", "args": {"expression": "1000 / 40"}}],
-      "difficulty": "easy"
-    },
-
-    {
-      "id": "multi-001",
-      "category": "multi_step",
-      "question": "Look up order ORD-1001 and tell me if I'm eligible for a full refund.",
-      "expected_answer": "30 days",
       "expected_tool_calls": [
-        {"tool": "lookup_order", "args": {"order_id": "ORD-1001"}},
-        {"tool": "rag_search", "args": {"query": "refund policy"}}
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2004"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "refund policy"
+          }
+        }
       ],
-      "difficulty": "hard"
+      "difficulty": "medium",
+      "question": "Is order ORD-2004 eligible for a full refund?",
+      "min_tool_calls": 2
     },
     {
-      "id": "multi-002",
-      "category": "multi_step",
-      "question": "Read the onboarding doc and tell me which team Alice Chen is on.",
-      "expected_answer": "platform",
+      "id": "refund-003",
+      "template_id": "refund-eligibility",
+      "params": {
+        "order_id": "ORD-2001"
+      },
+      "category": "policy",
+      "expected_answer": "late",
       "expected_tool_calls": [
-        {"tool": "mcp_read_file", "args": {"path": "docs/onboarding.md"}},
-        {"tool": "mcp_get_user", "args": {"user_id": "u-001"}}
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2001"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "refund policy late delivery"
+          }
+        }
       ],
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "question": "Is order ORD-2001 eligible for a full refund?",
+      "min_tool_calls": 2
     },
     {
-      "id": "multi-003",
-      "category": "multi_step",
-      "question": "What's the weather in San Francisco and what is 62 + 10?",
-      "expected_answer": "72",
+      "id": "refund-004",
+      "template_id": "refund-eligibility",
+      "params": {
+        "order_id": "ORD-2006"
+      },
+      "category": "policy",
+      "expected_answer": "eligible",
       "expected_tool_calls": [
-        {"tool": "get_weather", "args": {"city": "San Francisco"}},
-        {"tool": "calculator", "args": {"expression": "62 + 10"}}
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2006"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "refund policy"
+          }
+        }
       ],
-      "difficulty": "medium"
+      "difficulty": "easy",
+      "question": "Is order ORD-2006 eligible for a full refund?",
+      "min_tool_calls": 2
     },
     {
-      "id": "multi-004",
-      "category": "multi_step",
-      "question": "Find the remote work policy and tell me how many remote days are allowed.",
-      "expected_answer": "3 days",
+      "id": "shipment-eta-001",
+      "template_id": "shipment-eta",
+      "params": {
+        "order_id": "ORD-2001"
+      },
+      "category": "fulfillment",
+      "expected_answer": "2026-08-31",
       "expected_tool_calls": [
-        {"tool": "mcp_search_files", "args": {"query": "remote work"}},
-        {"tool": "mcp_read_file", "args": {"path": "docs/policies/remote-work.md"}}
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2001"
+          }
+        },
+        {
+          "tool": "ops_get_shipment",
+          "args": {
+            "order_id": "ORD-2001"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "shipping SLA"
+          }
+        }
       ],
-      "difficulty": "hard"
+      "difficulty": "medium",
+      "question": "When will order ORD-2001 arrive?",
+      "min_tool_calls": 3
     },
     {
-      "id": "multi-005",
-      "category": "multi_step",
-      "question": "Check order ORD-1003 status and calculate its total plus 10% tax.",
-      "expected_answer": "21.45",
+      "id": "shipment-eta-002",
+      "template_id": "shipment-eta",
+      "params": {
+        "order_id": "ORD-2002"
+      },
+      "category": "fulfillment",
+      "expected_answer": "2026-08-30",
       "expected_tool_calls": [
-        {"tool": "lookup_order", "args": {"order_id": "ORD-1003"}},
-        {"tool": "calculator", "args": {"expression": "19.5 * 1.1"}}
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2002"
+          }
+        },
+        {
+          "tool": "ops_get_shipment",
+          "args": {
+            "order_id": "ORD-2002"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "express shipping"
+          }
+        }
       ],
-      "difficulty": "hard"
+      "difficulty": "medium",
+      "question": "When will order ORD-2002 arrive?",
+      "min_tool_calls": 3
     },
     {
-      "id": "multi-006",
-      "category": "multi_step",
-      "question": "Who manages the platform team and what is their user ID?",
-      "expected_answer": "u-003",
+      "id": "shipment-eta-003",
+      "template_id": "shipment-eta",
+      "params": {
+        "order_id": "ORD-2005"
+      },
+      "category": "fulfillment",
+      "expected_answer": "2026-09-01",
       "expected_tool_calls": [
-        {"tool": "mcp_get_user", "args": {"user_id": "u-003"}}
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2005"
+          }
+        },
+        {
+          "tool": "ops_get_shipment",
+          "args": {
+            "order_id": "ORD-2005"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "shipping SLA"
+          }
+        }
       ],
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "question": "When will order ORD-2005 arrive?",
+      "min_tool_calls": 3
     },
     {
-      "id": "multi-007",
-      "category": "multi_step",
-      "question": "Search for deploy logs and tell me how many successful deploys are recorded.",
+      "id": "shipment-eta-004",
+      "template_id": "shipment-eta",
+      "params": {
+        "order_id": "ORD-2008"
+      },
+      "category": "fulfillment",
+      "expected_answer": "2026-08-29",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2008"
+          }
+        },
+        {
+          "tool": "ops_get_shipment",
+          "args": {
+            "order_id": "ORD-2008"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "shipping SLA"
+          }
+        }
+      ],
+      "difficulty": "hard",
+      "question": "When will order ORD-2008 arrive?",
+      "min_tool_calls": 3
+    },
+    {
+      "id": "qc-order-001",
+      "template_id": "qc-on-order",
+      "params": {
+        "order_id": "ORD-2002"
+      },
+      "category": "parts_trace",
+      "expected_answer": "PN-7782",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2002"
+          }
+        },
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-7782"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "QC failure"
+          }
+        }
+      ],
+      "difficulty": "hard",
+      "question": "Did any parts on order ORD-2002 fail QC?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "qc-order-002",
+      "template_id": "qc-on-order",
+      "params": {
+        "order_id": "ORD-2008"
+      },
+      "category": "parts_trace",
+      "expected_answer": "PN-9901",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2008"
+          }
+        },
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-9901"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "QC failure"
+          }
+        }
+      ],
+      "difficulty": "hard",
+      "question": "Did any parts on order ORD-2008 fail QC?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "qc-order-003",
+      "template_id": "qc-on-order",
+      "params": {
+        "order_id": "ORD-2005"
+      },
+      "category": "parts_trace",
+      "expected_answer": "PN-7782",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2005"
+          }
+        },
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-7782"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "QC failure"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "Did any parts on order ORD-2005 fail QC?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "qc-order-004",
+      "template_id": "qc-on-order",
+      "params": {
+        "order_id": "ORD-2004"
+      },
+      "category": "parts_trace",
+      "expected_answer": "no",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2004"
+          }
+        },
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-4421"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "QC failure"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "Did any parts on order ORD-2004 fail QC?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "inventory-001",
+      "template_id": "inventory-fulfillment",
+      "params": {
+        "order_id": "ORD-2003"
+      },
+      "category": "policy",
+      "expected_answer": "cannot",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2003"
+          }
+        },
+        {
+          "tool": "ops_get_inventory",
+          "args": {
+            "part_number": "PN-1100"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "inventory allocation"
+          }
+        }
+      ],
+      "difficulty": "hard",
+      "question": "Can order ORD-2003 be fulfilled from current inventory?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "inventory-002",
+      "template_id": "inventory-fulfillment",
+      "params": {
+        "order_id": "ORD-2006"
+      },
+      "category": "policy",
+      "expected_answer": "cannot",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2006"
+          }
+        },
+        {
+          "tool": "ops_get_inventory",
+          "args": {
+            "part_number": "PN-1100"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "inventory allocation"
+          }
+        }
+      ],
+      "difficulty": "hard",
+      "question": "Can order ORD-2006 be fulfilled from current inventory?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "inventory-003",
+      "template_id": "inventory-fulfillment",
+      "params": {
+        "order_id": "ORD-2001"
+      },
+      "category": "policy",
+      "expected_answer": "can",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2001"
+          }
+        },
+        {
+          "tool": "ops_get_inventory",
+          "args": {
+            "part_number": "PN-4421"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "inventory allocation"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "Can order ORD-2001 be fulfilled from current inventory?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "inventory-004",
+      "template_id": "inventory-fulfillment",
+      "params": {
+        "order_id": "ORD-2007"
+      },
+      "category": "policy",
+      "expected_answer": "can",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2007"
+          }
+        },
+        {
+          "tool": "ops_get_inventory",
+          "args": {
+            "part_number": "PN-3309"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "inventory allocation"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "Can order ORD-2007 be fulfilled from current inventory?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "ticket-owner-001",
+      "template_id": "ticket-owner",
+      "params": {
+        "ticket_id": "TKT-5001"
+      },
+      "category": "support",
+      "expected_answer": "Carol Wu",
+      "expected_tool_calls": [
+        {
+          "tool": "mcp_get_ticket",
+          "args": {
+            "ticket_id": "TKT-5001"
+          }
+        },
+        {
+          "tool": "mcp_get_user",
+          "args": {
+            "user_id": "u-003"
+          }
+        }
+      ],
+      "difficulty": "easy",
+      "question": "Who owns ticket TKT-5001 and what is it about?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "ticket-owner-002",
+      "template_id": "ticket-owner",
+      "params": {
+        "ticket_id": "TKT-5002"
+      },
+      "category": "support",
+      "expected_answer": "Alice Chen",
+      "expected_tool_calls": [
+        {
+          "tool": "mcp_get_ticket",
+          "args": {
+            "ticket_id": "TKT-5002"
+          }
+        },
+        {
+          "tool": "mcp_get_user",
+          "args": {
+            "user_id": "u-001"
+          }
+        }
+      ],
+      "difficulty": "easy",
+      "question": "Who owns ticket TKT-5002 and what is it about?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "ticket-owner-003",
+      "template_id": "ticket-owner",
+      "params": {
+        "ticket_id": "TKT-5004"
+      },
+      "category": "support",
+      "expected_answer": "Alice Chen",
+      "expected_tool_calls": [
+        {
+          "tool": "mcp_get_ticket",
+          "args": {
+            "ticket_id": "TKT-5004"
+          }
+        },
+        {
+          "tool": "mcp_get_user",
+          "args": {
+            "user_id": "u-001"
+          }
+        }
+      ],
+      "difficulty": "easy",
+      "question": "Who owns ticket TKT-5004 and what is it about?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "ticket-owner-004",
+      "template_id": "ticket-owner",
+      "params": {
+        "ticket_id": "TKT-5005"
+      },
+      "category": "support",
+      "expected_answer": "Carol Wu",
+      "expected_tool_calls": [
+        {
+          "tool": "mcp_get_ticket",
+          "args": {
+            "ticket_id": "TKT-5005"
+          }
+        },
+        {
+          "tool": "mcp_get_user",
+          "args": {
+            "user_id": "u-003"
+          }
+        }
+      ],
+      "difficulty": "easy",
+      "question": "Who owns ticket TKT-5005 and what is it about?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "customer-orders-001",
+      "template_id": "customer-open-orders",
+      "params": {
+        "customer_id": "C-100"
+      },
+      "category": "fulfillment",
+      "expected_answer": "ORD-2003",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_query_orders",
+          "args": {
+            "customer_id": "C-100"
+          }
+        },
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2001"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "notes": "C-100 also has ORD-2001 in_transit",
+      "question": "What non-delivered orders does customer C-100 have?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "customer-orders-002",
+      "template_id": "customer-open-orders",
+      "params": {
+        "customer_id": "C-101"
+      },
+      "category": "fulfillment",
+      "expected_answer": "ORD-2006",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_query_orders",
+          "args": {
+            "customer_id": "C-101"
+          }
+        },
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2002"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "What non-delivered orders does customer C-101 have?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "customer-orders-003",
+      "template_id": "customer-open-orders",
+      "params": {
+        "customer_id": "C-103"
+      },
+      "category": "fulfillment",
+      "expected_answer": "ORD-2005",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_query_orders",
+          "args": {
+            "customer_id": "C-103"
+          }
+        },
+        {
+          "tool": "ops_get_shipment",
+          "args": {
+            "order_id": "ORD-2005"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "What non-delivered orders does customer C-103 have?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "customer-orders-004",
+      "template_id": "customer-open-orders",
+      "params": {
+        "customer_id": "C-105"
+      },
+      "category": "fulfillment",
+      "expected_answer": "ORD-2008",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_query_orders",
+          "args": {
+            "customer_id": "C-105"
+          }
+        },
+        {
+          "tool": "ops_get_shipment",
+          "args": {
+            "order_id": "ORD-2008"
+          }
+        }
+      ],
+      "difficulty": "easy",
+      "question": "What non-delivered orders does customer C-105 have?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "orders-part-001",
+      "template_id": "orders-with-part",
+      "params": {
+        "part_number": "PN-7782"
+      },
+      "category": "parts_trace",
+      "expected_answer": "ORD-2002",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_find_orders_by_part",
+          "args": {
+            "part_number": "PN-7782"
+          }
+        },
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2002"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "Which orders include part PN-7782 and what are their statuses?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "orders-part-002",
+      "template_id": "orders-with-part",
+      "params": {
+        "part_number": "PN-4421"
+      },
+      "category": "parts_trace",
+      "expected_answer": "ORD-2001",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_find_orders_by_part",
+          "args": {
+            "part_number": "PN-4421"
+          }
+        },
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2001"
+          }
+        }
+      ],
+      "difficulty": "easy",
+      "question": "Which orders include part PN-4421 and what are their statuses?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "orders-part-003",
+      "template_id": "orders-with-part",
+      "params": {
+        "part_number": "PN-1100"
+      },
+      "category": "parts_trace",
+      "expected_answer": "ORD-2003",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_find_orders_by_part",
+          "args": {
+            "part_number": "PN-1100"
+          }
+        },
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2006"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "Which orders include part PN-1100 and what are their statuses?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "orders-part-004",
+      "template_id": "orders-with-part",
+      "params": {
+        "part_number": "PN-3309"
+      },
+      "category": "parts_trace",
+      "expected_answer": "ORD-2005",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_find_orders_by_part",
+          "args": {
+            "part_number": "PN-3309"
+          }
+        },
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2007"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "Which orders include part PN-3309 and what are their statuses?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "days-late-001",
+      "template_id": "days-late",
+      "params": {
+        "order_id": "ORD-2001",
+        "as_of_date": "2026-08-30"
+      },
+      "category": "fulfillment",
       "expected_answer": "2",
       "expected_tool_calls": [
-        {"tool": "mcp_search_files", "args": {"query": "deploy"}},
-        {"tool": "mcp_read_file", "args": {"path": "logs/deploy.txt"}}
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2001"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "late order"
+          }
+        },
+        {
+          "tool": "days_between",
+          "args": {
+            "start_date": "2026-08-28",
+            "end_date": "2026-08-30"
+          }
+        }
       ],
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "question": "How many days late is order ORD-2001 as of 2026-08-30?",
+      "min_tool_calls": 3
     },
     {
-      "id": "multi-008",
-      "category": "multi_step",
-      "question": "What are the Enterprise plan features and what is 50 * 100?",
-      "expected_answer": "5000",
+      "id": "days-late-002",
+      "template_id": "days-late",
+      "params": {
+        "order_id": "ORD-2005",
+        "as_of_date": "2026-08-30"
+      },
+      "category": "fulfillment",
+      "expected_answer": "3",
       "expected_tool_calls": [
-        {"tool": "rag_search", "args": {"query": "Enterprise plan"}},
-        {"tool": "calculator", "args": {"expression": "50 * 100"}}
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2005"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "late order"
+          }
+        },
+        {
+          "tool": "days_between",
+          "args": {
+            "start_date": "2026-08-27",
+            "end_date": "2026-08-30"
+          }
+        }
       ],
-      "difficulty": "medium"
+      "difficulty": "hard",
+      "question": "How many days late is order ORD-2005 as of 2026-08-30?",
+      "min_tool_calls": 3
     },
     {
-      "id": "multi-009",
-      "category": "multi_step",
-      "question": "Get Bob's team and look up the support hours for that team's timezone reference (Pacific).",
-      "expected_answer": "9am to 6pm Pacific",
+      "id": "days-late-003",
+      "template_id": "days-late",
+      "params": {
+        "order_id": "ORD-2008",
+        "as_of_date": "2026-08-30"
+      },
+      "category": "fulfillment",
+      "expected_answer": "4",
       "expected_tool_calls": [
-        {"tool": "mcp_get_user", "args": {"user_id": "u-002"}},
-        {"tool": "rag_search", "args": {"query": "support hours Pacific"}}
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2008"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "late order"
+          }
+        },
+        {
+          "tool": "days_between",
+          "args": {
+            "start_date": "2026-08-26",
+            "end_date": "2026-08-30"
+          }
+        }
       ],
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "question": "How many days late is order ORD-2008 as of 2026-08-30?",
+      "min_tool_calls": 3
     },
     {
-      "id": "multi-010",
-      "category": "multi_step",
-      "question": "Read app config and multiply max_retries by 10.",
-      "expected_answer": "30",
+      "id": "days-late-004",
+      "template_id": "days-late",
+      "params": {
+        "order_id": "ORD-2002",
+        "as_of_date": "2026-08-30"
+      },
+      "category": "fulfillment",
+      "expected_answer": "1",
       "expected_tool_calls": [
-        {"tool": "mcp_read_file", "args": {"path": "config/app.json"}},
-        {"tool": "calculator", "args": {"expression": "3 * 10"}}
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2002"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "late order"
+          }
+        },
+        {
+          "tool": "days_between",
+          "args": {
+            "start_date": "2026-08-29",
+            "end_date": "2026-08-30"
+          }
+        }
       ],
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "question": "How many days late is order ORD-2002 as of 2026-08-30?",
+      "min_tool_calls": 3
     },
     {
-      "id": "multi-011",
-      "category": "multi_step",
-      "question": "What's the shipping SLA for express and what's the weather in New York?",
-      "expected_answer": "1-2 business days",
+      "id": "restock-001",
+      "template_id": "restock-check",
+      "params": {
+        "part_number": "PN-1100"
+      },
+      "category": "policy",
+      "expected_answer": "2026-09-01",
       "expected_tool_calls": [
-        {"tool": "rag_search", "args": {"query": "express shipping"}},
-        {"tool": "get_weather", "args": {"city": "New York"}}
+        {
+          "tool": "ops_get_inventory",
+          "args": {
+            "part_number": "PN-1100"
+          }
+        },
+        {
+          "tool": "ops_find_orders_by_part",
+          "args": {
+            "part_number": "PN-1100"
+          }
+        }
       ],
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "question": "When will part PN-1100 be restocked?",
+      "min_tool_calls": 2
     },
     {
-      "id": "multi-012",
-      "category": "multi_step",
-      "question": "Look up ORD-1002 and check if express shipping could deliver in time (1-2 days).",
-      "expected_answer": "1-2 business days",
+      "id": "restock-002",
+      "template_id": "restock-check",
+      "params": {
+        "part_number": "PN-7782"
+      },
+      "category": "policy",
+      "expected_answer": "2026-09-05",
       "expected_tool_calls": [
-        {"tool": "lookup_order", "args": {"order_id": "ORD-1002"}},
-        {"tool": "rag_search", "args": {"query": "express shipping"}}
+        {
+          "tool": "ops_get_inventory",
+          "args": {
+            "part_number": "PN-7782"
+          }
+        },
+        {
+          "tool": "ops_find_orders_by_part",
+          "args": {
+            "part_number": "PN-7782"
+          }
+        }
       ],
-      "difficulty": "hard"
+      "difficulty": "easy",
+      "question": "When will part PN-7782 be restocked?",
+      "min_tool_calls": 2
     },
     {
-      "id": "multi-013",
-      "category": "multi_step",
-      "question": "Find the password policy and confirm it requires a symbol.",
-      "expected_answer": "symbol",
+      "id": "restock-003",
+      "template_id": "restock-check",
+      "params": {
+        "part_number": "PN-4421"
+      },
+      "category": "policy",
+      "expected_answer": "2026-09-10",
       "expected_tool_calls": [
-        {"tool": "rag_search", "args": {"query": "password requirements"}}
+        {
+          "tool": "ops_get_inventory",
+          "args": {
+            "part_number": "PN-4421"
+          }
+        },
+        {
+          "tool": "ops_find_orders_by_part",
+          "args": {
+            "part_number": "PN-4421"
+          }
+        }
       ],
-      "difficulty": "medium"
+      "difficulty": "easy",
+      "question": "When will part PN-4421 be restocked?",
+      "min_tool_calls": 2
     },
     {
-      "id": "multi-014",
-      "category": "multi_step",
-      "question": "Get Carol Wu's details and read the onboarding requirements.",
-      "expected_answer": "7 days",
+      "id": "restock-004",
+      "template_id": "restock-check",
+      "params": {
+        "part_number": "PN-9901"
+      },
+      "category": "policy",
+      "expected_answer": "2026-09-20",
       "expected_tool_calls": [
-        {"tool": "mcp_get_user", "args": {"user_id": "u-003"}},
-        {"tool": "mcp_read_file", "args": {"path": "docs/onboarding.md"}}
+        {
+          "tool": "ops_get_inventory",
+          "args": {
+            "part_number": "PN-9901"
+          }
+        },
+        {
+          "tool": "ops_find_orders_by_part",
+          "args": {
+            "part_number": "PN-9901"
+          }
+        }
       ],
-      "difficulty": "hard"
+      "difficulty": "easy",
+      "question": "When will part PN-9901 be restocked?",
+      "min_tool_calls": 2
     },
     {
-      "id": "multi-015",
-      "category": "multi_step",
-      "question": "Calculate the Pro tier rate limit times 5.",
-      "expected_answer": "5000",
+      "id": "escalation-001",
+      "template_id": "escalation-for-order",
+      "params": {
+        "order_id": "ORD-2001"
+      },
+      "category": "support",
+      "expected_answer": "TKT-5001",
       "expected_tool_calls": [
-        {"tool": "rag_search", "args": {"query": "Pro tier rate limit"}},
-        {"tool": "calculator", "args": {"expression": "1000 * 5"}}
+        {
+          "tool": "mcp_search_tickets",
+          "args": {
+            "query": "ORD-2001"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "escalation matrix"
+          }
+        }
       ],
-      "difficulty": "hard"
+      "difficulty": "medium",
+      "question": "Is there an open escalation for order ORD-2001?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "escalation-002",
+      "template_id": "escalation-for-order",
+      "params": {
+        "order_id": "ORD-2008"
+      },
+      "category": "support",
+      "expected_answer": "TKT-5004",
+      "expected_tool_calls": [
+        {
+          "tool": "mcp_search_tickets",
+          "args": {
+            "query": "ORD-2008"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "escalation"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "Is there an open escalation for order ORD-2008?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "escalation-003",
+      "template_id": "escalation-for-order",
+      "params": {
+        "order_id": "ORD-2004"
+      },
+      "category": "support",
+      "expected_answer": "resolved",
+      "expected_tool_calls": [
+        {
+          "tool": "mcp_search_tickets",
+          "args": {
+            "query": "ORD-2004"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "escalation"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "Is there an open escalation for order ORD-2004?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "escalation-004",
+      "template_id": "escalation-for-order",
+      "params": {
+        "order_id": "ORD-2003"
+      },
+      "category": "support",
+      "expected_answer": "no",
+      "expected_tool_calls": [
+        {
+          "tool": "mcp_search_tickets",
+          "args": {
+            "query": "ORD-2003"
+          }
+        },
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2003"
+          }
+        }
+      ],
+      "difficulty": "easy",
+      "question": "Is there an open escalation for order ORD-2003?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "part-delay-001",
+      "template_id": "part-delay-cause",
+      "params": {
+        "part_number": "PN-7782"
+      },
+      "category": "parts_trace",
+      "expected_answer": "qc_failed",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-7782"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "part traceability"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "What caused delays for part PN-7782?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "part-delay-002",
+      "template_id": "part-delay-cause",
+      "params": {
+        "part_number": "PN-3309"
+      },
+      "category": "parts_trace",
+      "expected_answer": "Missed transfer scan",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-3309"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "part traceability delays"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "What caused delays for part PN-3309?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "part-delay-003",
+      "template_id": "part-delay-cause",
+      "params": {
+        "part_number": "PN-9901"
+      },
+      "category": "parts_trace",
+      "expected_answer": "Customs hold",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-9901"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "part traceability"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "What caused delays for part PN-9901?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "part-delay-004",
+      "template_id": "part-delay-cause",
+      "params": {
+        "part_number": "PN-4421"
+      },
+      "category": "parts_trace",
+      "expected_answer": "no delay",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_part_history",
+          "args": {
+            "part_number": "PN-4421"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "part traceability"
+          }
+        }
+      ],
+      "difficulty": "easy",
+      "question": "What caused delays for part PN-4421?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "blocker-001",
+      "template_id": "fulfillment-blocker",
+      "params": {
+        "order_id": "ORD-2007"
+      },
+      "category": "support",
+      "expected_answer": "payment_verification",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2007"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "order hold policy"
+          }
+        }
+      ],
+      "difficulty": "medium",
+      "question": "What is blocking fulfillment of order ORD-2007?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "blocker-002",
+      "template_id": "fulfillment-blocker",
+      "params": {
+        "order_id": "ORD-2003"
+      },
+      "category": "support",
+      "expected_answer": "inventory",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2003"
+          }
+        },
+        {
+          "tool": "ops_get_inventory",
+          "args": {
+            "part_number": "PN-1100"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "inventory allocation"
+          }
+        }
+      ],
+      "difficulty": "hard",
+      "question": "What is blocking fulfillment of order ORD-2003?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "blocker-003",
+      "template_id": "fulfillment-blocker",
+      "params": {
+        "order_id": "ORD-2002"
+      },
+      "category": "support",
+      "expected_answer": "Weather delay",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2002"
+          }
+        },
+        {
+          "tool": "ops_get_shipment",
+          "args": {
+            "order_id": "ORD-2002"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "shipping SLA carrier delays"
+          }
+        }
+      ],
+      "difficulty": "hard",
+      "question": "What is blocking fulfillment of order ORD-2002?",
+      "min_tool_calls": 2
+    },
+    {
+      "id": "blocker-004",
+      "template_id": "fulfillment-blocker",
+      "params": {
+        "order_id": "ORD-2006"
+      },
+      "category": "support",
+      "expected_answer": "inventory",
+      "expected_tool_calls": [
+        {
+          "tool": "ops_get_order",
+          "args": {
+            "order_id": "ORD-2006"
+          }
+        },
+        {
+          "tool": "ops_get_inventory",
+          "args": {
+            "part_number": "PN-1100"
+          }
+        },
+        {
+          "tool": "rag_search",
+          "args": {
+            "query": "inventory allocation"
+          }
+        }
+      ],
+      "difficulty": "hard",
+      "question": "What is blocking fulfillment of order ORD-2006?",
+      "min_tool_calls": 2
     }
   ]
 }

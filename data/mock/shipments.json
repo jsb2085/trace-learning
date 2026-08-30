@@ -1,0 +1,60 @@
+{
+  "shipments": [
+    {
+      "shipment_id": "SHP-9001",
+      "order_id": "ORD-2001",
+      "carrier": "FedEx",
+      "tracking_number": "FX-8829100",
+      "status": "in_transit",
+      "origin": "Warehouse-East",
+      "destination": "Austin, TX",
+      "estimated_delivery": "2026-08-31",
+      "last_scan": {"timestamp": "2026-08-29T18:00:00Z", "location": "Memphis, TN", "detail": "Departed facility"}
+    },
+    {
+      "shipment_id": "SHP-9002",
+      "order_id": "ORD-2002",
+      "carrier": "UPS",
+      "tracking_number": "UP-4412001",
+      "status": "in_transit",
+      "origin": "Warehouse-West",
+      "destination": "Denver, CO",
+      "estimated_delivery": "2026-08-30",
+      "last_scan": {"timestamp": "2026-08-29T22:00:00Z", "location": "Denver, CO", "detail": "Weather delay — rescheduled"}
+    },
+    {
+      "shipment_id": "SHP-9003",
+      "order_id": "ORD-2004",
+      "carrier": "FedEx",
+      "tracking_number": "FX-8829103",
+      "status": "delivered",
+      "origin": "Warehouse-East",
+      "destination": "Seattle, WA",
+      "estimated_delivery": "2026-08-26",
+      "delivered_at": "2026-08-26",
+      "last_scan": {"timestamp": "2026-08-26T14:00:00Z", "location": "Seattle, WA", "detail": "Delivered"}
+    },
+    {
+      "shipment_id": "SHP-9004",
+      "order_id": "ORD-2005",
+      "carrier": "USPS",
+      "tracking_number": "US-3300444",
+      "status": "in_transit",
+      "origin": "Warehouse-East",
+      "destination": "Chicago, IL",
+      "estimated_delivery": "2026-09-01",
+      "last_scan": {"timestamp": "2026-08-28T09:00:00Z", "location": "Indianapolis, IN", "detail": "Missed transfer scan"}
+    },
+    {
+      "shipment_id": "SHP-9005",
+      "order_id": "ORD-2008",
+      "carrier": "DHL",
+      "tracking_number": "DH-9900100",
+      "status": "in_transit",
+      "origin": "Warehouse-West",
+      "destination": "Portland, OR",
+      "estimated_delivery": "2026-08-29",
+      "last_scan": {"timestamp": "2026-08-28T11:00:00Z", "location": "Portland, OR", "detail": "Out for delivery — failed attempt"}
+    }
+  ]
+}

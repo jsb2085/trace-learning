@@ -11,6 +11,7 @@ from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
 
 from trace_learning.mock.mcp.tools import get_mcp_tools
+from trace_learning.mock.ops.tools import get_ops_tools
 from trace_learning.mock.rag.retriever import get_rag_tool
 from trace_learning.mock.tools.registry import get_builtin_tools
 
@@ -38,12 +39,15 @@ class DeepAgent:
 def create_deep_agent(
     llm: BaseChatModel | None = None,
     *,
+    include_ops: bool = True,
     include_mcp: bool = True,
     include_rag: bool = True,
     include_builtin: bool = True,
 ) -> DeepAgent:
     """Build a deep agent with the requested mock tool groups."""
     tools: list[BaseTool] = []
+    if include_ops:
+        tools.extend(get_ops_tools())
     if include_mcp:
         tools.extend(get_mcp_tools())
     if include_rag:

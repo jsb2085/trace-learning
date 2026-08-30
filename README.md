@@ -1,137 +1,115 @@
 # Trace Learning
 
-Experimental project for building a **deep agent** that learns and replays workflows to reduce token usage and improve accuracy.
+Experimental project for building a **deep agent** that learns and replays multi-tool workflows to reduce token usage and improve accuracy.
 
 ## Goals
 
-1. **Deep agent** — LangChain / LangGraph ReAct agent with access to mock MCP, RAG, and built-in tools
-2. **Eval dataset** — 60 questions with deterministic expected outputs (we control the mocks)
-3. **Workflow graph** — Store recurring tool-call patterns so the agent can execute known workflows faster
-4. **Trace learning** — Use agent execution traces to populate and refine the workflow graph over time
+1. **Deep agent** — LangGraph ReAct agent combining ops tools, MCP tickets/users, RAG policies, and utilities
+2. **Parameterized eval** — 60 question instances from 15 reusable templates with varying inputs
+3. **Workflow graph** — Capture multi-step tool patterns (e.g. policy lookup → ops query → synthesis)
+4. **Trace learning** — Learn workflows from agent traces to skip re-reasoning on repeat patterns
 
 ## Project Structure
 
 ```
 trace-learning/
 ├── data/
+│   ├── mock/                   # Domain data (orders, parts, shipments, inventory, tickets)
 │   ├── eval/
-│   │   ├── questions.json      # 60 eval questions + expected outputs
-│   │   └── results/            # Eval run outputs (gitignored)
-│   ├── graph/
-│   │   └── workflows.json      # Learned / hand-authored workflow graphs
-│   └── rag/
-│       └── documents.json      # Knowledge base for mock RAG
+│   │   ├── templates.json      # 15 reusable question templates
+│   │   ├── questions.json      # 60 instances (template + params + expected tools)
+│   │   └── results/
+│   ├── graph/workflows.json
+│   └── rag/documents.json      # Policy docs (SLA, refunds, QC, holds)
 ├── src/trace_learning/
-│   ├── agent/                  # Deep agent (LangGraph ReAct)
-│   ├── eval/                   # Dataset schema + eval runner
-│   ├── graph/                  # Workflow graph schema + store
+│   ├── agent/
+│   ├── eval/
+│   ├── graph/
 │   └── mock/
-│       ├── mcp/                # Mock MCP filesystem + user directory
-│       ├── rag/                # Mock RAG retriever
-│       └── tools/              # Built-in tools (calculator, orders, weather)
-├── scripts/                    # CLI entry points (via pyproject scripts)
+│       ├── data/               # JSON loaders
+│       ├── ops/                # Orders, parts, shipments, inventory
+│       ├── mcp/                # Tickets + user directory
+│       ├── rag/
+│       └── tools/              # days_between, calculator
+├── scripts/generate_eval_dataset.py
 └── tests/
 ```
 
 ## Quick Start
 
-### 1. Install
-
 ```bash
-python -m venv .venv
-source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
-```
+cp .env.example .env   # add OPENAI_API_KEY
 
-### 2. Configure
-
-```bash
-cp .env.example .env
-# Add your OPENAI_API_KEY
-```
-
-### 3. Run tests (no API key needed)
-
-```bash
-pytest
-```
-
-### 4. Run the agent
-
-```bash
-trace-agent "What is the refund policy?"
-# or interactive REPL:
-trace-agent
-```
-
-### 5. Run evaluation
-
-```bash
-trace-eval
-trace-eval --id rag-001        # single question
+python3 -m pytest -v
+trace-agent "What orders are late as of 2026-08-30?"
+trace-eval --id late-orders-001
 ```
 
 ## Mock Capabilities
 
-All mock implementations return **deterministic** data so eval expected outputs are knowable.
+All data is deterministic under a fixed business date (`2026-08-30`).
 
-| Group | Tools | Mock Data |
-|-------|-------|-----------|
-| **MCP** | `mcp_read_file`, `mcp_search_files`, `mcp_get_user` | Filesystem, user directory |
-| **RAG** | `rag_search` | `data/rag/documents.json` |
-| **Built-in** | `calculator`, `lookup_order`, `get_weather` | Orders, weather, math |
+| Group | Tools | Purpose |
+|-------|-------|---------|
+| **Ops** | `ops_query_orders`, `ops_get_order`, `ops_get_part_history`, `ops_get_shipment`, `ops_get_inventory`, `ops_find_orders_by_part`, `ops_find_late_orders`, `ops_get_business_date` | Fulfillment domain |
+| **MCP** | `mcp_get_ticket`, `mcp_search_tickets`, `mcp_get_user` | Support tickets + owners |
+| **RAG** | `rag_search` | Policy docs (late orders, refunds, QC, inventory) |
+| **Utils** | `days_between`, `calculator` | Date math for SLA questions |
 
-## Eval Dataset
+## Eval Dataset Design
 
-`data/eval/questions.json` contains **60 questions** in four categories:
+Questions are **not** one-shot RAG or MCP lookups. Each instance requires **2+ tools** across groups.
 
-| Category | Count | Description |
-|----------|-------|-------------|
-| `rag` | 15 | Knowledge retrieval from mock docs |
-| `mcp` | 15 | Filesystem and user lookups |
-| `builtin` | 15 | Calculator, orders, weather |
-| `multi_step` | 15 | Questions requiring 2+ tool calls |
+### Templates (reusable, parameterized)
 
-Each question includes:
+Examples from `data/eval/templates.json`:
 
-- `expected_answer` — substring the agent response should contain
-- `expected_tool_calls` — tools (and args) the agent should invoke
-- `difficulty` — easy / medium / hard
+| Template | Example instance |
+|----------|------------------|
+| `What orders are late as of {as_of_date}?` | `2026-08-30` → ORD-2001, ORD-2002, ORD-2005, ORD-2008 |
+| `What happened to part {part_number}?` | `PN-7782` → QC failure, rework, carrier delay |
+| `Why is order {order_id} delayed?` | `ORD-2008` → customs hold + failed delivery |
+| `What is blocking fulfillment of order {order_id}?` | `ORD-2003` → PN-1100 stockout |
 
-Check coverage:
+15 templates × 4 input variants = **60 instances**.
 
-```python
-from trace_learning.eval.dataset import EvalDataset
-print(EvalDataset.load().coverage_report())
+### Categories
+
+| Category | Count | Example workflow |
+|----------|-------|------------------|
+| `fulfillment` | 20 | RAG late policy → `ops_find_late_orders` |
+| `parts_trace` | 16 | `ops_get_part_history` → `ops_find_orders_by_part` |
+| `policy` | 12 | `ops_get_order` → `rag_search` refund rules |
+| `support` | 12 | `mcp_search_tickets` → `mcp_get_user` |
+
+### Regenerating instances
+
+Edit `scripts/generate_eval_dataset.py` instance specs, then:
+
+```bash
+python3 scripts/generate_eval_dataset.py
 ```
 
 ## Workflow Graph (Next Phase)
 
-The graph layer (`src/trace_learning/graph/`) stores workflows as directed graphs of tool and LLM nodes. Example workflows live in `data/graph/workflows.json`.
+Example workflows in `data/graph/workflows.json` mirror eval templates:
 
-**Planned capabilities** (not yet implemented):
-
-- Match incoming questions to known workflows
-- Execute workflow tool sequences directly (skip ReAct reasoning)
-- Learn new workflows from successful agent traces
-- Measure token savings vs. baseline ReAct
+- **Late Order Identification** — `rag_search` → `ops_find_late_orders`
+- **Part History Investigation** — `ops_get_part_history` → `ops_find_orders_by_part`
+- **Order Delay Root Cause** — order → shipment → part events
 
 ## Roadmap
 
 - [ ] Wire workflow graph into agent execution path
 - [ ] Trace capture during agent runs
-- [ ] Workflow learning from traces
-- [ ] Structured eval scoring (tool-call sequence matching)
-- [ ] Embedding-based RAG and workflow matching
-- [ ] Real MCP server adapter (replace mock transport)
+- [ ] Structured eval: tool-call sequence matching (not just answer substring)
+- [ ] Template sampling for eval (randomize params at runtime)
+- [ ] Real MCP server adapter
 
 ## Development
 
 ```bash
-ruff check src tests
-pytest -v
+python3 -m pytest -v
 ```
-
-## License
-
-Experimental — internal use.
